@@ -1,6 +1,10 @@
+import BaseTests.ConsoleTest;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-class SudokuVerifierTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class SudokuVerifierTest extends ConsoleTest {
 
     public static final int [][] VALID = {  {2,4,1, 6,9,5,  3,8,7},
                                             {7,3,5, 4,2,8,  1,6,9},
@@ -24,8 +28,23 @@ class SudokuVerifierTest {
                                             {8,5,4, 1,8,2,  6,7,3},
                                             {3,2,6, 9,5,7,  8,1,4}};
 
-    @BeforeEach
-    void setUp() {
+    SudokuVerifier sudokuVerifier;
 
+    @BeforeEach
+    public void setUp() {
+        super.setUp();
+        sudokuVerifier = new SudokuVerifier();
+    }
+
+    @Test
+    public void EndToEndValid(){
+        boolean result = sudokuVerifier.check(SudokuVerifierTest.VALID);
+        assertTrue(result);
+    }
+
+    @Test
+    public void EndToEndInvalid(){
+        boolean result = sudokuVerifier.check(SudokuVerifierTest.INVALID);
+        assertFalse(result);
     }
 }
