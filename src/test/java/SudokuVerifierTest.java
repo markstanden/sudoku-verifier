@@ -38,6 +38,16 @@ class SudokuVerifierTest {
                                                 {4, 5, 6, 7, 8, 9, 1, 2, 3},
                                                 {8, 6, 9, 1, 2, 3, 4, 5, 6}};
 
+    public static final int[][] VALID_2 =      {{1, 2, 3, 4, 5, 6, 7, 8, 9},
+                                                {4, 5, 6, 7, 8, 9, 1, 2, 3},
+                                                {7, 8, 9, 1, 2, 3, 4, 5, 6},
+                                                {2, 3, 4, 5, 6, 7, 8, 9, 1},
+                                                {5, 6, 7, 8, 9, 1, 2, 3, 4},
+                                                {8, 9, 1, 2, 3, 4, 5, 6, 7},
+                                                {3, 4, 5, 6, 7, 8, 9, 1, 2},
+                                                {6, 7, 8, 9, 1, 2, 3, 4, 5},
+                                                {9, 1, 2, 3, 4, 5, 6, 7, 8}};
+
     public static final int[][] INVALID_ROWS = {{1, 4, 7, 1, 4, 7, 1, 4, 7},
                                                 {2, 5, 8, 2, 5, 8, 2, 5, 8},
                                                 {3, 6, 9, 3, 6, 9, 3, 6, 9},
@@ -48,15 +58,15 @@ class SudokuVerifierTest {
                                                 {8, 2, 5, 8, 2, 5, 8, 2, 5},
                                                 {9, 3, 6, 9, 3, 6, 9, 3, 6}};
 
-    public static final int[][] INVALID_BLOCKS = {  {1, 2, 3, 4, 5, 6, 7, 8, 9},
-                                                    {2, 3, 4, 5, 6, 7, 8, 9, 1},
-                                                    {3, 4, 5, 6, 7, 8, 9, 1, 2},
-                                                    {4, 5, 6, 7, 8, 9, 1, 2, 3},
-                                                    {5, 6, 7, 8, 9, 1, 2, 3, 4},
-                                                    {6, 7, 8, 9, 1, 2, 3, 4, 5},
-                                                    {7, 8, 9, 1, 2, 3, 4, 5, 6},
-                                                    {8, 9, 1, 2, 3, 4, 5, 6, 7},
-                                                    {9, 1, 2, 3, 4, 5, 6, 7, 8}};
+    public static final int[][] ALL_INVALID_BLOCKS = {  {1, 2, 3, 4, 5, 6, 7, 8, 9},
+                                                        {2, 3, 4, 5, 6, 7, 8, 9, 1},
+                                                        {3, 4, 5, 6, 7, 8, 9, 1, 2},
+                                                        {4, 5, 6, 7, 8, 9, 1, 2, 3},
+                                                        {5, 6, 7, 8, 9, 1, 2, 3, 4},
+                                                        {6, 7, 8, 9, 1, 2, 3, 4, 5},
+                                                        {7, 8, 9, 1, 2, 3, 4, 5, 6},
+                                                        {8, 9, 1, 2, 3, 4, 5, 6, 7},
+                                                        {9, 1, 2, 3, 4, 5, 6, 7, 8}};
 
     private ByteArrayOutputStream console;
 
@@ -76,6 +86,13 @@ class SudokuVerifierTest {
     @Test
     public void EndToEndSuppliedValidTest() {
         SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.VALID);
+        sudokuVerifier.verifySolution();
+        assertEquals("Solution is Valid", getStrippedConsole());
+    }
+
+    @Test
+    public void EndToEndRegularValidTest() {
+        SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.VALID_2);
         sudokuVerifier.verifySolution();
         assertEquals("Solution is Valid", getStrippedConsole());
     }
@@ -103,7 +120,7 @@ class SudokuVerifierTest {
 
     @Test
     public void InvalidBlocksReturnsInvalid() {
-        SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.INVALID_BLOCKS);
+        SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.ALL_INVALID_BLOCKS);
         sudokuVerifier.verifySolution();
         assertEquals("Solution is Invalid", getStrippedConsole());
     }

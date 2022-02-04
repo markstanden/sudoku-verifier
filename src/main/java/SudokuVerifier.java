@@ -107,7 +107,7 @@ public class SudokuVerifier {
             // Break the grid into columns
 
             Set<Integer> blockSet = new HashSet<>();
-            for(int row = 0; row <= grid.length - BLOCK_SIZE; row++){
+            for(int row = 0; row < grid.length; row++){
                 // left-hand column of each of the three columns
                 // iterate each row
 
