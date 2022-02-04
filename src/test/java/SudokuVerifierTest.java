@@ -28,16 +28,75 @@ class SudokuVerifierTest extends ConsoleTest {
                                             {8,5,4, 1,8,2,  6,7,3},
                                             {3,2,6, 9,5,7,  8,1,4}};
 
+    public static final int [][] INVALID_COLS = {   {1,2,3, 4,5,6,  7,8,9},
+                                                    {4,5,6, 7,8,9,  1,2,3},
+                                                    {8,6,9, 1,2,3,  4,5,6},
+
+                                                    {1,2,3, 4,5,6,  7,8,9},
+                                                    {4,5,6, 7,8,9,  1,2,3},
+                                                    {8,6,9, 1,2,3,  4,5,6},
+
+                                                    {1,2,3, 4,5,6,  7,8,9},
+                                                    {4,5,6, 7,8,9,  1,2,3},
+                                                    {8,6,9, 1,2,3,  4,5,6}};
+
+    public static final int [][] INVALID_ROWS = {   {1,4,7, 1,4,7,  1,4,7},
+                                                    {2,5,8, 2,5,8,  2,5,8},
+                                                    {3,6,9, 3,6,9,  3,6,9},
+
+                                                    {4,7,1, 4,7,1,  4,7,1},
+                                                    {5,8,2, 5,8,2,  5,8,2},
+                                                    {6,9,3, 6,9,3,  6,9,3},
+
+                                                    {7,1,4, 7,1,4,  7,1,4},
+                                                    {8,2,5, 8,2,5,  8,2,5},
+                                                    {9,3,6, 9,3,6,  9,3,6}};
+
+    public static final int [][] INVALID_BLOCKS = { {1,2,3, 4,5,6,  7,8,9},
+                                                    {2,3,4, 5,6,7,  8,9,1},
+                                                    {3,4,5, 6,7,8,  9,1,2},
+
+                                                    {4,5,6, 7,8,9,  1,2,3},
+                                                    {5,6,7, 8,9,1,  2,3,4},
+                                                    {6,7,8, 9,1,2,  3,4,5},
+
+                                                    {7,8,9, 1,2,3,  4,5,6},
+                                                    {8,9,1, 2,3,4,  5,6,7},
+                                                    {9,1,2, 3,4,5,  6,7,8}};
+
+
     @Test
-    public void EndToEndValid(){
+    public void EndToEndSuppliedValidTest(){
         SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.VALID);
-        assertTrue(sudokuVerifier.isValid());
-        System.out.println(getStrippedConsole());
+        sudokuVerifier.verifySolution();
+        assertEquals("Solution is Valid", getStrippedConsole());
     }
 
     @Test
-    public void EndToEndInvalid(){
+    public void EndToEndSuppliedInvalidTest(){
         SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.INVALID);
-        assertFalse(sudokuVerifier.isValid());
+        sudokuVerifier.verifySolution();
+        assertEquals("Solution is Invalid", getStrippedConsole());
+    }
+
+    @Test
+    public void InvalidRowsReturnsInvalid(){
+        SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.INVALID_ROWS);
+        sudokuVerifier.verifySolution();
+        assertEquals("Solution is Invalid", getStrippedConsole());
+    }
+
+    @Test
+    public void InvalidColsReturnsInvalid(){
+        SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.INVALID_COLS);
+        sudokuVerifier.verifySolution();
+        assertEquals("Solution is Invalid", getStrippedConsole());
+    }
+
+    @Test
+    public void InvalidBlocksReturnsInvalid(){
+        SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.INVALID_BLOCKS);
+        sudokuVerifier.verifySolution();
+        assertEquals("Solution is Invalid", getStrippedConsole());
     }
 }
