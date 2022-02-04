@@ -1,10 +1,12 @@
-import BaseTests.ConsoleTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class SudokuVerifierTest extends ConsoleTest {
+class SudokuVerifierTest {
 
     public static final int [][] VALID = {  {2,4,1, 6,9,5,  3,8,7},
                                             {7,3,5, 4,2,8,  1,6,9},
@@ -64,6 +66,20 @@ class SudokuVerifierTest extends ConsoleTest {
                                                     {8,9,1, 2,3,4,  5,6,7},
                                                     {9,1,2, 3,4,5,  6,7,8}};
 
+    private ByteArrayOutputStream console;
+
+    @BeforeEach
+    private void setUp() {
+        /* Redirect the stdout to our print stream
+         * to monitor console output. */
+        console = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(console);
+        System.setOut(ps);
+    }
+
+    private String getStrippedConsole() {
+        return console.toString().stripTrailing();
+    }
 
     @Test
     public void EndToEndSuppliedValidTest(){
