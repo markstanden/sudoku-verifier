@@ -28,23 +28,16 @@ class SudokuVerifierTest extends ConsoleTest {
                                             {8,5,4, 1,8,2,  6,7,3},
                                             {3,2,6, 9,5,7,  8,1,4}};
 
-    SudokuVerifier sudokuVerifier;
-
-    @BeforeEach
-    public void setUp() {
-        super.setUp();
-        sudokuVerifier = new SudokuVerifier();
-    }
-
     @Test
     public void EndToEndValid(){
-        boolean result = sudokuVerifier.check(SudokuVerifierTest.VALID);
-        assertTrue(result);
+        SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.VALID);
+        assertTrue(sudokuVerifier.isValid());
+        System.out.println(getStrippedConsole());
     }
 
     @Test
     public void EndToEndInvalid(){
-        boolean result = sudokuVerifier.check(SudokuVerifierTest.INVALID);
-        assertFalse(result);
+        SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.INVALID);
+        assertFalse(sudokuVerifier.isValid());
     }
 }
