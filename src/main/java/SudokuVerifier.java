@@ -97,7 +97,6 @@ public class SudokuVerifier {
      * @return  true if all blocks are valid.
      */
     private boolean blocksAreValid() {
-
         // Checks in columns:
         //      A D G
         //      B E H
@@ -105,11 +104,13 @@ public class SudokuVerifier {
 
         for(int startCol = 0; startCol <= grid[0].length - BLOCK_SIZE; startCol = startCol + BLOCK_SIZE){
             // Break the grid into columns
+            // startCol = 0, 3, 6
 
             Set<Integer> blockSet = new HashSet<>();
             for(int row = 0; row < grid.length; row++){
                 // left-hand column of each of the three columns
                 // iterate each row
+                // row = 0,1,2,3 to 8
 
                 // Create a copy of the current block line and add to the block set
                 Set<Integer> currentLine = arrayToSet(Arrays.copyOfRange(grid[row], startCol, startCol + BLOCK_SIZE));
@@ -122,6 +123,9 @@ public class SudokuVerifier {
                     if(!isValidSet(blockSet)){
                         return false;
                     }
+                    // if the block is valid we need to check the next one
+                    // so clear the set.
+                    blockSet.clear();
                 }
             }
         }
