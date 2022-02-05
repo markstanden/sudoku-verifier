@@ -18,7 +18,7 @@ public class SudokuVerifier {
     /**
      * Prints a message to the console informing
      * the user whether the grid is valid or not.
-     * <p>
+     *
      * Prints either:
      * Solution is Valid
      * Solution is Invalid
@@ -167,7 +167,7 @@ public class SudokuVerifier {
 
         // Break the grid into columns
         for (int firstCol = 0; firstCol <= grid[0].length - BLOCK_SIZE; firstCol = firstCol + BLOCK_SIZE) {
-            // startCol = 0, 3, 6
+            // firstCol = 0, 3, 6
 
             // Break the columns into rows
             for (int firstRow = 0; firstRow <= grid.length - BLOCK_SIZE; firstRow = firstRow + BLOCK_SIZE) {
