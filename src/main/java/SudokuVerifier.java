@@ -93,10 +93,43 @@ public class SudokuVerifier {
 
     /**
      * Checks each 3x3 Block for validity.
+     * Using parallel streams.
      *
      * @return  true if all blocks are valid.
      */
     private boolean blocksAreValid() {
+        final int NUM_OF_BLOCKS = grid[0].length / BLOCK_SIZE;
+        // Checks in columns:
+        //      A D G
+        //      B E H
+        //      C F I
+
+        //for(int startCol = 0; startCol <= grid[0].length - BLOCK_SIZE; startCol = startCol + BLOCK_SIZE){
+        return IntStream.iterate(0, x -> x + BLOCK_SIZE)
+                .limit(NUM_OF_BLOCKS)                                                           // IntStream            // indices of starting columns
+                .parallel()                                                                     // IntStream            // many indices of starting columns
+                .mapToObj(leftMostColumn -> IntStream.iterate(0, x -> x + BLOCK_SIZE)      // IntStream            // 0, 3, 6, 9, 12
+                        .limit(NUM_OF_BLOCKS)                                                   // IntStream            // indices of starting rows (0, 3, 6)
+                        .parallel()                                                             // IntStream            // many indices of starting rows
+                        .mapToObj(topRow -> IntStream.range(topRow, topRow + BLOCK_SIZE)        // IntStream            // indices block rows 0, 1, 2
+                                .parallel()                                                     // IntStream            // many indices of block rows
+                                .mapToObj(blockRowIndex -> Arrays.copyOfRange(grid[blockRowIndex], leftMostColumn, leftMostColumn + BLOCK_SIZE))        // Stream<int[]>    // Create a copy of the block row
+                                .flatMapToInt(blockArray -> Arrays.stream(blockArray))          // IntStream            // Converts all the mini arrays into a new IntStream
+                                .boxed()                                                        // Stream<Integer>      // Collectors won't take an IntStream :-(
+                                .collect(Collectors.toSet())                                    // Set<Integer>         // Add all to a block set
+                        )                                                                       // Stream<Set<Integer>> // All the block sets within this column
+                        .allMatch(this::isValidSet)                                             // Stream<boolean>      // Will fail early if any block within column fails test
+                )
+                .allMatch(x -> x);                                                              // boolean              // Will fail early if any column fails test
+}
+
+/**
+ * Checks each 3x3 Block for validity.
+ * Using classic java for loops
+ *
+ * @return  true if all blocks are valid.
+ */
+    private boolean classicJavaBlocksAreValid() {
         // Checks in columns:
         //      A D G
         //      B E H
