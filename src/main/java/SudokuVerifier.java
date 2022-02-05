@@ -18,7 +18,7 @@ public class SudokuVerifier {
     /**
      * Prints a message to the console informing
      * the user whether the grid is valid or not.
-     *
+     * 
      * Prints either:
      * Solution is Valid
      * Solution is Invalid
@@ -34,9 +34,10 @@ public class SudokuVerifier {
      * @return returns true if the supplied grid is valid, false if invalid
      */
     private boolean gridIsValid() {
-        return  rowsAreValid()
-                && columnsAreValid()
-                && blocksAreValid();
+        return checkAllRows()
+                && checkAllColumns()
+                && functionalCheckAllBlocks();  // Functional implementation using streams
+        //      && checkAllBlocks();            // Classic Java implementation using loops
     }
 
     /**
@@ -68,100 +69,140 @@ public class SudokuVerifier {
      *
      * @return true if valid, false if invalid.
      */
-    private boolean rowsAreValid() {
+    private boolean checkAllRows() {
         return Stream.of(grid).parallel()                   // Stream<int[]>
                 .map(this::arrayToSet)                      // Stream<Set<Integer>>
                 .allMatch(this::isValidSet);                // Boolean
     }
 
     /**
-     * Checks all columns for validity.
+     * Checks individual row for validity.
+     * Not actually used, but included for completeness.
      *
-     * @return true if all blocks are valid.
+     * @param row the index of the row to be tested
+     * @return true if valid, false if invalid.
      */
-    private boolean columnsAreValid() {
-        return IntStream.range(0, grid[0].length)           // IntStream                Produce indices from 0-8
-                .parallel()                                 // IntStream                Many indices at once
-                .mapToObj(index -> Arrays.stream(grid)          // Stream<int[]>            Stream of rows
-                        .parallel()                             // Stream<int[]>            Many rows at once
-                        .mapToInt(row -> row[index])            // IntStream                values at current index
-                        .boxed()                                // Stream<Integer>          toSet won't autobox from an IntStream
-                        .collect(Collectors.toSet())            // Set<Integer>             Add all the values into a set
-                )                                           // Stream<Set<Integer>>     Stream of Sets
-                .allMatch(this::isValidSet);                // Boolean                  Validate all the produced sets, only true if All true
+    private boolean checkRow(final int row) {
+        return isValidSet(arrayToSet(grid[row]));
     }
 
     /**
-     * Checks each 3x3 Block for validity.
+     * Checks all columns for validity.
      * Using parallel streams.
      *
-     * @return  true if all blocks are valid.
+     * @return true if all blocks are valid.
      */
-    private boolean blocksAreValid() {
+    private boolean checkAllColumns() {
+        return IntStream.range(0, grid[0].length)               // IntStream        Produce indices from 0-8
+                .parallel()                                     // IntStream        Many indices at once
+                .allMatch(column -> checkAColumn(column));      // Boolean          Validate each column, only true if all true
+    }
+
+    /**
+     * Checks a single column for validity.
+     * Using parallel streams.
+     *
+     * @param column the index of the column to be verified
+     * @return true if all blocks are valid.
+     */
+    private boolean checkAColumn(final int column) {
+        return isValidSet(
+                Arrays.stream(grid)                     // Stream<int[]>            Stream of rows
+                        .parallel()                             // Stream<int[]>            Many rows at once
+                        .mapToInt(row -> row[column])           // IntStream                values at current index
+                        .boxed()                                // Stream<Integer>          toSet won't autobox from an IntStream
+                        .collect(Collectors.toSet())            // Set<Integer>             Add all the values into a set
+        );                                              // Boolean                  True if column is valid.
+
+    }
+
+    /**
+     * Checks all blocks for validity.
+     * Using parallel streams.
+     *
+     * @return true if all blocks are valid.
+     */
+    private boolean functionalCheckAllBlocks() {
         final int NUM_OF_BLOCKS = grid[0].length / BLOCK_SIZE;
-        // Checks in columns:
-        //      A D G
-        //      B E H
-        //      C F I
 
-        //for(int startCol = 0; startCol <= grid[0].length - BLOCK_SIZE; startCol = startCol + BLOCK_SIZE){
         return IntStream.iterate(0, x -> x + BLOCK_SIZE)
-                .limit(NUM_OF_BLOCKS)                                                           // IntStream            // indices of starting columns
-                .parallel()                                                                     // IntStream            // many indices of starting columns
-                .mapToObj(leftMostColumn -> IntStream.iterate(0, x -> x + BLOCK_SIZE)      // IntStream            // 0, 3, 6, 9, 12
-                        .limit(NUM_OF_BLOCKS)                                                   // IntStream            // indices of starting rows (0, 3, 6)
-                        .parallel()                                                             // IntStream            // many indices of starting rows
-                        .mapToObj(topRow -> IntStream.range(topRow, topRow + BLOCK_SIZE)        // IntStream            // indices block rows 0, 1, 2
-                                .parallel()                                                     // IntStream            // many indices of block rows
-                                .mapToObj(blockRowIndex -> Arrays.copyOfRange(grid[blockRowIndex], leftMostColumn, leftMostColumn + BLOCK_SIZE))        // Stream<int[]>    // Create a copy of the block row
-                                .flatMapToInt(blockArray -> Arrays.stream(blockArray))          // IntStream            // Converts all the mini arrays into a new IntStream
-                                .boxed()                                                        // Stream<Integer>      // Collectors won't take an IntStream :-(
-                                .collect(Collectors.toSet())                                    // Set<Integer>         // Add all to a block set
-                        )                                                                       // Stream<Set<Integer>> // All the block sets within this column
-                        .allMatch(this::isValidSet)                                             // Stream<boolean>      // Will fail early if any block within column fails test
-                )
-                .allMatch(x -> x);                                                              // boolean              // Will fail early if any column fails test
-}
+                .limit(NUM_OF_BLOCKS)                                                        // IntStream            // indices of starting columns
+                .parallel()                                                                  // IntStream            // many indices of starting columns
+                .allMatch(firstCol -> IntStream.iterate(0, x -> x + BLOCK_SIZE)         // IntStream            // 0, 3, 6, 9, 12
+                        .limit(NUM_OF_BLOCKS)                                                // IntStream            // indices of starting rows (0, 3, 6)
+                        .parallel()                                                          // IntStream            // many indices of starting rows
+                        .allMatch(firstRow -> functionalCheckABlock(firstRow, firstCol))     // Stream<boolean>      // Will fail early if any block within column fails test
+                );                                                                           // boolean              // Will fail early if any column fails test
+    }
 
-/**
- * Checks each 3x3 Block for validity.
- * Using classic java for loops
- *
- * @return  true if all blocks are valid.
- */
-    private boolean classicJavaBlocksAreValid() {
+    /**
+     * Checks the validity of a single block
+     *
+     * @param firstRow The index of the top row of the block
+     * @param firstCol The index of the left hand column of the block
+     * @return true if the block is valid
+     */
+    private boolean functionalCheckABlock(final int firstRow, final int firstCol) {
+        return isValidSet(
+                IntStream.range(firstRow, firstRow + BLOCK_SIZE)                            // IntStream            // indices block rows 0, 1, 2
+                        .parallel()                                                         // IntStream            // many indices of block rows
+                        .mapToObj(blockRow -> Arrays.copyOfRange(grid[blockRow], firstCol, firstCol + BLOCK_SIZE))        // Stream<int[]>    // Create a copy of the block row
+                        .flatMapToInt(blockArray -> Arrays.stream(blockArray))              // IntStream            // Converts all the mini arrays into a new IntStream
+                        .boxed()                                                            // Stream<Integer>      // Collectors won't take an IntStream :-(
+                        .collect(Collectors.toSet())                                        // Set<Integer>         // Add all to a block set
+        );
+    }
+
+    /**
+     * Checks all blocks for validity.
+     * Using classic java for loops
+     *
+     * @return true if all blocks are valid.
+     */
+    private boolean checkAllBlocks() {
         // Checks in columns:
         //      A D G
         //      B E H
         //      C F I
 
-        for(int startCol = 0; startCol <= grid[0].length - BLOCK_SIZE; startCol = startCol + BLOCK_SIZE){
-            // Break the grid into columns
+        // Break the grid into columns
+        for (int firstCol = 0; firstCol <= grid[0].length - BLOCK_SIZE; firstCol = firstCol + BLOCK_SIZE) {
             // startCol = 0, 3, 6
 
-            Set<Integer> blockSet = new HashSet<>();
-            for(int row = 0; row < grid.length; row++){
-                // left-hand column of each of the three columns
-                // iterate each row
-                // row = 0,1,2,3 to 8
+            // Break the columns into rows
+            for (int firstRow = 0; firstRow <= grid.length - BLOCK_SIZE; firstRow = firstRow + BLOCK_SIZE) {
+                // firstRow = 0, 3, 6
+                // grid[firstRow][firstCol] is top left corner of each block within grid
 
-                // Create a copy of the current block line and add to the block set
-                Set<Integer> currentLine = arrayToSet(Arrays.copyOfRange(grid[row], startCol, startCol + BLOCK_SIZE));
-                blockSet.addAll(currentLine);
-
-                // if the next row index is a multiple of three
-                // we have finished the block, so check the set
-                if((row + 1) % 3 == 0) {
-                    // if block is not valid, exit early
-                    if(!isValidSet(blockSet)){
-                        return false;
-                    }
-                    // if the block is valid we need to check the next one
-                    // so clear the set.
-                    blockSet.clear();
+                // check each block, any failures should fail test
+                if (!checkABlock(firstRow, firstCol)) {
+                    return false;
                 }
             }
         }
         return true;
+
+    }
+
+    /**
+     * Checks a single block for validity.
+     * Using classic java for loops
+     *
+     * @return true if the block is valid.
+     */
+    private boolean checkABlock(final int firstRow, final int firstCol) {
+        //create an empty set for the block
+        final Set<Integer> blockSet = new HashSet<>();
+
+        for (int blockRow = firstRow; blockRow < firstRow + BLOCK_SIZE; blockRow++) {
+            // left-hand column of each of the three columns
+            // iterate each row of block
+            // e.g. blockRow = 6,7,8
+
+            // Create a copy of the current block line and add to the block set
+            Set<Integer> currentLine = arrayToSet(Arrays.copyOfRange(grid[blockRow], firstCol, firstCol + BLOCK_SIZE));
+            blockSet.addAll(currentLine);
+        }
+        return isValidSet(blockSet);
     }
 }
