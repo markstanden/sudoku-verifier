@@ -18,7 +18,7 @@ public class SudokuVerifier {
     /**
      * Prints a message to the console informing
      * the user whether the grid is valid or not.
-     * 
+     * <p>
      * Prints either:
      * Solution is Valid
      * Solution is Invalid
@@ -108,10 +108,10 @@ public class SudokuVerifier {
     private boolean checkAColumn(final int column) {
         return isValidSet(
                 Arrays.stream(grid)                     // Stream<int[]>            Stream of rows
-                        .parallel()                             // Stream<int[]>            Many rows at once
-                        .mapToInt(row -> row[column])           // IntStream                values at current index
-                        .boxed()                                // Stream<Integer>          toSet won't autobox from an IntStream
-                        .collect(Collectors.toSet())            // Set<Integer>             Add all the values into a set
+                        .parallel()                     // Stream<int[]>            Many rows at once
+                        .mapToInt(row -> row[column])   // IntStream                values at current index
+                        .boxed()                        // Stream<Integer>          toSet won't autobox from an IntStream
+                        .collect(Collectors.toSet())    // Set<Integer>             Add all the values into a set
         );                                              // Boolean                  True if column is valid.
 
     }
@@ -146,7 +146,7 @@ public class SudokuVerifier {
         return isValidSet(
                 IntStream.range(firstRow, firstRow + BLOCK_SIZE)                            // IntStream            // indices block rows 0, 1, 2
                         .parallel()                                                         // IntStream            // many indices of block rows
-                        .mapToObj(blockRow -> Arrays.copyOfRange(grid[blockRow], firstCol, firstCol + BLOCK_SIZE))        // Stream<int[]>    // Create a copy of the block row
+                        .mapToObj(blockRow -> Arrays.copyOfRange(grid[blockRow], firstCol, firstCol + BLOCK_SIZE))  // Stream<int[]>    // Create a copy of the block row
                         .flatMapToInt(blockArray -> Arrays.stream(blockArray))              // IntStream            // Converts all the mini arrays into a new IntStream
                         .boxed()                                                            // Stream<Integer>      // Collectors won't take an IntStream :-(
                         .collect(Collectors.toSet())                                        // Set<Integer>         // Add all to a block set
