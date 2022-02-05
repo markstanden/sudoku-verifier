@@ -8,6 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SudokuVerifierTest {
 
+    public static final String VALID_RESPONSE = "Solution is Valid";
+    public static final String INVALID_RESPONSE = "Solution is Invalid";
+
     public static final int[][] VALID = {   {2, 4, 1, 6, 9, 5, 3, 8, 7},
                                             {7, 3, 5, 4, 2, 8, 1, 6, 9},
                                             {8, 6, 9, 7, 3, 1, 4, 2, 5},
@@ -107,55 +110,55 @@ class SudokuVerifierTest {
     public void EndToEndSuppliedValidTest() {
         SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.VALID);
         sudokuVerifier.verifySolution();
-        assertEquals("Solution is Valid", getStrippedConsole());
+        assertEquals(VALID_RESPONSE, getStrippedConsole());
     }
 
     @Test
     public void EndToEndRegularValidTest() {
         SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.VALID_2);
         sudokuVerifier.verifySolution();
-        assertEquals("Solution is Valid", getStrippedConsole());
+        assertEquals(VALID_RESPONSE, getStrippedConsole());
     }
 
     @Test
     public void EndToEndSuppliedInvalidTest() {
         SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.INVALID);
         sudokuVerifier.verifySolution();
-        assertEquals("Solution is Invalid", getStrippedConsole());
+        assertEquals(INVALID_RESPONSE, getStrippedConsole());
     }
 
     @Test
     public void InvalidRowsReturnsInvalid() {
         SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.INVALID_ROWS);
         sudokuVerifier.verifySolution();
-        assertEquals("Solution is Invalid", getStrippedConsole());
+        assertEquals(INVALID_RESPONSE, getStrippedConsole());
     }
 
     @Test
     public void InvalidColsReturnsInvalid() {
         SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.INVALID_COLS);
         sudokuVerifier.verifySolution();
-        assertEquals("Solution is Invalid", getStrippedConsole());
+        assertEquals(INVALID_RESPONSE, getStrippedConsole());
     }
 
     @Test
     public void InvalidBlocksReturnsInvalid() {
         SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.ALL_INVALID_BLOCKS);
         sudokuVerifier.verifySolution();
-        assertEquals("Solution is Invalid", getStrippedConsole());
+        assertEquals(INVALID_RESPONSE, getStrippedConsole());
     }
 
     @Test
     public void InvalidLastValueReturnsInvalid() {
         SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.INVALID_LAST);
         sudokuVerifier.verifySolution();
-        assertEquals("Solution is Invalid", getStrippedConsole());
+        assertEquals(INVALID_RESPONSE, getStrippedConsole());
     }
 
     @Test
     public void InvalidFirstValueReturnsInvalid() {
         SudokuVerifier sudokuVerifier = new SudokuVerifier(SudokuVerifierTest.INVALID_FIRST);
         sudokuVerifier.verifySolution();
-        assertEquals("Solution is Invalid", getStrippedConsole());
+        assertEquals(INVALID_RESPONSE, getStrippedConsole());
     }
 }
