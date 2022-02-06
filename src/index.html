@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sudoku Verifier</title>
+    <style>
+        div.table {
+            display: table;
+            border: 3px solid;
+        }
+
+        div.tr {
+            display: table-row;
+        }
+
+        span.td {
+            display: table-cell;
+        }
+
+        span > input {
+            border: none;
+            width: 2rem;
+            height: 2rem;
+            text-align: center;
+            margin: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+<form method="post" action="verify">
+    <div class="table">
+        <div class="tr">
+            <span class="td"><input name="1-1" type="text" value="0"/></span>
+            <span class="td"><input name="1-2" type="text" value="0"/></span>
+        </div>
+    </div>
+    <button>Verify</button>
+</form>
+</body>
+</html>
