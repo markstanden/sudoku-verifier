@@ -1,5 +1,3 @@
-package HttpServer;
-
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -19,11 +17,17 @@ public class VerifyHandler implements HttpHandler {
      * @throws IOException
      */
     public void handle(HttpExchange exchange) throws IOException {
+        String formData = "";
         if (exchange.getRequestMethod().equals("POST")) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody()));
-            reader.lines()
-                    .forEach(System.out::println);
+            formData = reader.lines()
+                    .filter(line -> line.startsWith("R0-C0"))
+                    .findFirst()
+                    .orElse("");
         }
+
+        Grid grid = new Grid(formData);
+
         String response = "<h1>Successfully reached page</h1>";
         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.length());
         OutputStream responseBody = exchange.getResponseBody();
