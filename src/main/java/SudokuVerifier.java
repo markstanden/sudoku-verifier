@@ -4,7 +4,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class SudokuVerifier {
+public class SudokuVerifier{
     public static final int[] VALID_NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     public static final int BLOCK_SIZE = 3;
 
