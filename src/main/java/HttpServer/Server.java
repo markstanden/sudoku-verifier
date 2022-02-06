@@ -18,18 +18,22 @@ public class Server {
         this.port = port;
     }
 
-    public static boolean start() {
-        Server server;
+    public static Server start() {
+        Server sudoku;
         try {
-            server = new Server(5000);
+            sudoku = new Server(5000);
         } catch (Exception ex) {
-            System.out.println(ex);
-            return false;
+            System.out.println(ex.getMessage());
+            return null;
         }
-        System.out.println("server started at " + server.port);
-        server.server.createContext("/", new DisplayHandler());
-        server.server.createContext("/verify/", new VerifyHandler());
-        server.server.start();
-        return true;
+        sudoku.server.createContext("/", new DisplayHandler());
+        sudoku.server.createContext("/verify", new VerifyHandler());
+        sudoku.server.start();
+        return sudoku;
+    }
+
+
+    public int getPort() {
+        return port;
     }
 }
