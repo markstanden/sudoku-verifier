@@ -7,7 +7,8 @@ class SudokuVerifierTest extends ConsoleTest {
 
     public static final String VALID_RESPONSE = "Solution is Valid";
     public static final String INVALID_RESPONSE = "Solution is Invalid";
-    
+
+
     @Test
     public void EndToEndSuppliedValidTest() {
         SudokuVerifier sudokuVerifier = new SudokuVerifier(TestGrids.VALID);
