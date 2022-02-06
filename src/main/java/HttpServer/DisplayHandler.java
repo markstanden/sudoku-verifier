@@ -24,7 +24,7 @@ public class DisplayHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         String html = "";
         try {
-            html = Files.readString(Path.of("src/index.html"));
+            html = Files.readString(Path.of("src/valid.html"));
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.getMessage();
