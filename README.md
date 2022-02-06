@@ -4,9 +4,9 @@ A mini project to verify a sudoku grid.
 
 ## The Challenge
 
-Given a valid grid and an invalid grid correctly identify the invalid grid by checking rows| columns and blocks.
+Given a valid grid and an invalid grid correctly identify the invalid grid by checking rows, columns and blocks.
 
-A valid row| column and block contains 9 values - each of the values between 1-9 inclusive| without duplication.
+A valid row, column and block contains 9 values - each of the values between 1-9 (inclusive) without duplication.
 
 ### Valid Sudoku Grid
 
