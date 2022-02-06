@@ -4,9 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class ConsoleTest {
 
@@ -16,16 +13,16 @@ public abstract class ConsoleTest {
         return console.toString().stripTrailing();
     }
 
-    protected Stream<String> consoleToStream() {
-        return console.toString().lines();
-    }
-
     @BeforeEach
     public void setUp() {
-        /* Redirect the stdout to our printstream
-         * to monitor console output. */
+
+        // Redirect the stdout to our PrintStream
+        // to monitor console output.
         console = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(console);
-        System.setOut(ps);
+
+        // Characters written to STDOUT get sent to our
+        // PrintStream which converts it to bytes and sends
+        // to our output stream.
+        System.setOut(new PrintStream(console));
     }
 }

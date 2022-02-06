@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -11,8 +10,19 @@ public class SudokuVerifier {
 
     private final int[][] grid;
 
-    SudokuVerifier(final int[][] grid) {
+    private SudokuVerifier(final int[][] grid) {
         this.grid = grid;
+    }
+
+    /**
+     * Static builder to reduce boilerplate when verifying a grid
+     *
+     * @param grid The sudoku grid to be verified
+     * @return true if the grid is valid, false if invalid
+     */
+    public static boolean verify(int[][] grid) {
+        SudokuVerifier verifier = new SudokuVerifier(grid);
+        return verifier.gridIsValid();
     }
 
     /**
@@ -23,7 +33,7 @@ public class SudokuVerifier {
      * Solution is Invalid
      * To the console.
      */
-    public void verifySolution() {
+    private void verifySolution() {
         System.out.println("Solution is ".concat(gridIsValid() ? "Valid" : "Invalid"));
     }
 
@@ -32,7 +42,7 @@ public class SudokuVerifier {
      *
      * @return returns true if the supplied grid is valid, false if invalid
      */
-    public boolean gridIsValid() {
+    private boolean gridIsValid() {
         return checkAllRows()
                 && checkAllColumns()
                 && functionalCheckAllBlocks();
