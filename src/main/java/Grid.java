@@ -1,6 +1,4 @@
 import java.util.Arrays;
-import java.util.List;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -25,26 +23,30 @@ public class Grid {
      * @return new Grid object
      */
     public static Grid fromFormData(String formData) {
-        //Pattern p = Pattern.compile("(?![R][-][C][\\d][=])(\\d?)(?=&|$)");
-        Matcher m = p.matcher(formData);
-        List<Integer> asList = m.results()
-                .limit(81)
-                .sequential()
-                .map(MatchResult::group)
-                .map(Integer::getInteger)
-                .toList();
-        System.out.println(asList);
+        Pattern p = Pattern.compile("^R[0-8]-C[0-8]=([0-9]?)$");
 
-        Arrays.stream(formData.split("&"))
-                .sequential()
-                //.filter(value -> value.matches(p.pattern()))
-                .forEach(System.out::println);
+        String[] unsafeString = formData.split("&");
+        int[] safe = Arrays.stream(unsafeString)
+                .filter(cellValue -> cellValue.matches(p.pattern()))
+                .map(value -> {
+                    Matcher m = p.matcher(value);
+                    return m.results()
+                            .map(matchResult -> matchResult.group(1))
+                            .map(match -> match.isBlank() ? "0" : match)
+                            .findFirst()
+                            .orElse("0");
+                })
+                .mapToInt(Integer::valueOf)
+                .toArray();
 
-        return new Grid( (int[][]) IntStream.range(0, 9)
-                .mapToObj(row -> asList.subList(0 * row, 9 * row))
-                .map(list -> list.toArray())
-                .toArray());
 
+        int[][] out = IntStream.range(0, 9)
+                .mapToObj(row ->
+                    Arrays.copyOfRange(safe, 9 * row, 9 * (row + 1))
+                )
+                .toArray(int[][]::new);
+
+        return new Grid(out);
     }
 
     public int[][] to2DArray() {
