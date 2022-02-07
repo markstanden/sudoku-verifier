@@ -50,4 +50,9 @@ class SudokuVerifierTest extends ConsoleTest {
     public void InvalidBlocksValidRowsColsMinimalReturnsInvalid() {
         assertFalse(SudokuVerifier.verify(TestGrids.INVALID_BLOCKS_MINIMAL));
     }
+
+    @Test
+    public void AllZeroesReturnsInvalid() {
+        assertFalse(SudokuVerifier.verify(TestGrids.INVALID_ALL_ZEROES));
+    }
 }

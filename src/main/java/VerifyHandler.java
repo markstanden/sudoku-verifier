@@ -27,7 +27,7 @@ public class VerifyHandler implements HttpHandler {
         }
         System.out.println("Form Data");
         System.out.println(formData);
-        int[][] grid = Grid.fromFormData(formData);
+        int[][] grid = Grid.fromFormData(formData).to2DArray();
         System.out.println("As Grid");
         System.out.println(grid);
         boolean isValid = SudokuVerifier.verify(grid);

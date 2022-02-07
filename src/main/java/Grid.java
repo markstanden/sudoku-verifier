@@ -24,8 +24,8 @@ public class Grid {
      * @param formData
      * @return new Grid object
      */
-    public static int[][] fromFormData(String formData) {
-        Pattern p = Pattern.compile("(?![R][-][C][\\d][=])(\\d?)(?=&|$)");
+    public static Grid fromFormData(String formData) {
+        //Pattern p = Pattern.compile("(?![R][-][C][\\d][=])(\\d?)(?=&|$)");
         Matcher m = p.matcher(formData);
         List<Integer> asList = m.results()
                 .limit(81)
@@ -40,10 +40,10 @@ public class Grid {
                 //.filter(value -> value.matches(p.pattern()))
                 .forEach(System.out::println);
 
-        return (int[][]) IntStream.range(0, 9)
+        return new Grid( (int[][]) IntStream.range(0, 9)
                 .mapToObj(row -> asList.subList(0 * row, 9 * row))
                 .map(list -> list.toArray())
-                .toArray();
+                .toArray());
 
     }
 
