@@ -16,6 +16,8 @@ class GridTest {
     }
 
     @Test
-    void to2DArray() {
+    void validTo2DArray() {
+        Grid grid = new Grid(TestGrids.VALID_REGULAR);
+        assertArrayEquals(TestGrids.VALID_REGULAR, grid.to2DArray());
     }
 }
