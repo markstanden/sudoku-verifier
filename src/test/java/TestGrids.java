@@ -35,7 +35,7 @@ public abstract class TestGrids {
             {8, 6, 9, 1, 2, 3, 4, 5, 6}
     };
 
-    public static final int[][] REGULAR_VALID = {
+    public static final int[][] VALID_REGULAR = {
             {1, 2, 3, 4, 5, 6, 7, 8, 9},
             {4, 5, 6, 7, 8, 9, 1, 2, 3},
             {7, 8, 9, 1, 2, 3, 4, 5, 6},

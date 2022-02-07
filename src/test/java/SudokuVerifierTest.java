@@ -13,7 +13,7 @@ class SudokuVerifierTest extends ConsoleTest {
 
     @Test
     public void EndToEndRegularValidTest() {
-        assertTrue(SudokuVerifier.verify(TestGrids.REGULAR_VALID));
+        assertTrue(SudokuVerifier.verify(TestGrids.VALID_REGULAR));
     }
 
     @Test

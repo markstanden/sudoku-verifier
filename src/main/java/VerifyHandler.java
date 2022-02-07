@@ -25,10 +25,16 @@ public class VerifyHandler implements HttpHandler {
                     .findFirst()
                     .orElse("");
         }
+        System.out.println("Form Data");
+        System.out.println(formData);
+        int[][] grid = Grid.fromFormData(formData);
+        System.out.println("As Grid");
+        System.out.println(grid);
+        boolean isValid = SudokuVerifier.verify(grid);
+        System.out.println("Validity");
+        System.out.println(isValid);
 
-        Grid grid = new Grid(formData);
-
-        String response = "<h1>Successfully reached page</h1>";
+        String response = "<h1>Grid is " + (isValid ? "Valid" : "Invalid") + "</h1>";
         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.length());
         OutputStream responseBody = exchange.getResponseBody();
         responseBody.write(response.getBytes());
