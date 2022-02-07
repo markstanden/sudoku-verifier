@@ -2,6 +2,8 @@
 
 A mini project to verify a sudoku grid.
 
+![Screenshot of the app's front-end](./docs/images/2022-02-07_screenshot.png)
+
 ## The Challenge
 
 Given a valid grid and an invalid grid correctly identify the invalid grid by checking rows, columns and blocks.
@@ -55,3 +57,30 @@ I wanted to write end-to-end tests with a limited public API to verify the app w
 rather than unit testing individual methods.  This was in part because the initial challenge was
 to write a single output to the console stating whether the grid was valid, which means I'd need
 to create test grids for isolated tests.
+
+- end-to-end test grids tailored to test individual private methods.
+
+## Furthering the project
+
+### Servlet
+
+Originally the verifier used the console as a means of communication, but I wrote a little servlet to send and receive grids.
+This also allowed more practice at the following within Java:
+- validating responses
+- regular expressions
+- string manipulation
+- functional streams and lambdas
+
+### Front End
+
+It also provided an opportunity to exhibit:
+- some creative use of forms
+- css stying
+
+## Future
+
+[] Java generated html
+[] bookmarkable urls to store state
+[] better response page
+[] testing server with test http requests
+[] refactor for hidden grid implementation
