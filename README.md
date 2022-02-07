@@ -81,9 +81,9 @@ It also provided an opportunity to exhibit:
 
 ### TODO
 
-[ ] Java generated html  
-[ ] bookmarkable urls to store state  
-[ ] better response page  
-[ ] testing server with test http requests  
-[ ] refactor for hidden grid implementation  
-[ ] dockerfile for easy deployment  
+- [ ] Java generated html  
+- [ ] bookmarkable urls to store state  
+- [ ] better response page  
+- [ ] testing server with test http requests  
+- [ ] refactor for hidden grid implementation  
+- [ ] dockerfile for easy deployment  
