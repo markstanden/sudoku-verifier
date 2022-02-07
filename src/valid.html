@@ -4,132 +4,211 @@
     <meta charset="UTF-8">
     <title>Sudoku Verifier</title>
     <style>
-        div.table {
-            display: table;
-            border: 3px solid;
+        :root {
+            --font-color: #25171A;
+            --border-color: #5E5297;
+            --background-grid: #AEAED6;
+            --background-main: #E4E4F1;
         }
 
-        fieldset.tr {
+        html {
+            font-family: sans-serif;
+            color: var(--font-color);
+            background-color: var(--background-main);
+        }
+
+        .title {
+            display: flex;
+            justify-content: space-between;
+            border: 4px solid var(--border-color);
+            background-color: var(--border-color);
+            color: var(--background-main);
+            border-radius: 0.75rem;
+            padding: 1rem;
+        }
+
+        p.author {
+            align-self: end;
+        }
+
+        .blurb {
+            margin: 2rem;
+        }
+        div.grid-full {
+            display: table;
+            margin: 2rem auto;
+            border: 2px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1rem 0.4rem;
+            background-color: var(--background-grid);
+            box-shadow: 0.05rem 0.05rem 0.3rem var(--font-color);
+        }
+
+        fieldset.grid-row {
             display: table-row;
+            margin: 0;
             border: none;
         }
 
-        span.td {
+        fieldset.grid-row:nth-child(3n):not(:last-child) {
+            padding-bottom: 1.4rem;
+            margin-bottom: 1.4rem;
+            border-bottom: 1px solid;
+            border-color: var(--border-color);
+        }
+
+        span.grid-cell {
             display: table-cell;
         }
 
         span > input {
             border: none;
-
+            font-size: 1.5rem;
             text-align: center;
-            margin: 0.5rem;
+            padding: 0.5rem;
+            background-color: var(--background-grid);
         }
+
+        span:nth-child(3n+4):not(:last-child) {
+            border-left: 1px solid var(--border-color);
+            padding-left: 1rem;
+        }
+
+        span > input:nth-child(2n) {
+            background-color: var(--background-color1);
+        }
+
+        button.verify {
+            padding: 1rem;
+            width: 100%;
+            margin: 0 auto;
+            border-color: var(--border-color);
+            background-color: var(--background-grid);
+            border-radius: 0.5rem;
+            box-shadow: 0.05rem 0.05rem 0.3rem var(--font-color);
+            transition: all ease-in 0.1s;
+        }
+
+        button:hover,
+        button:target {
+            transform: translateY(-1px);
+            background-color: var(--border-color);
+            border-color: var(--background-grid);
+            color: var(--background-main);
+        }
+
     </style>
 </head>
 <body>
-<form id="sudoku-grid" method="post" action="verify">
-    <div class="table">
-        <fieldset class="tr" name="Row0" form="sudoku-grid" >
-            <span class="td"><input name="R0-C0" type="number" min="0" max="9" value="1"/></span>
-            <span class="td"><input name="R0-C1" type="number" min="0" max="9" value="2"/></span>
-            <span class="td"><input name="R0-C2" type="number" min="0" max="9" value="3"/></span>
-            <span class="td"><input name="R0-C3" type="number" min="0" max="9" value="4"/></span>
-            <span class="td"><input name="R0-C4" type="number" min="0" max="9" value="5"/></span>
-            <span class="td"><input name="R0-C5" type="number" min="0" max="9" value="6"/></span>
-            <span class="td"><input name="R0-C6" type="number" min="0" max="9" value="7"/></span>
-            <span class="td"><input name="R0-C7" type="number" min="0" max="9" value="8"/></span>
-            <span class="td"><input name="R0-C8" type="number" min="0" max="9" value="9"/></span>
+<header class="title">
+    <h1>The Sudoku Verifier</h1>
+    <p class="author">By Mark Standen</p>
+</header>
+
+<p class="blurb">Enter your grid here, for instant verification.  I hope you win!</p>
+<form id="grid-form" method="post" action="verify">
+    <div class="grid-full">
+        <fieldset class="grid-row" name="Row0" form="grid-form">
+            <span class="grid-cell"><input name="R0-C0" type="number" min="0" max="9" value="1"/></span>
+            <span class="grid-cell"><input name="R0-C1" type="number" min="0" max="9" value="2"/></span>
+            <span class="grid-cell"><input name="R0-C2" type="number" min="0" max="9" value="3"/></span>
+            <span class="grid-cell"><input name="R0-C3" type="number" min="0" max="9" value="4"/></span>
+            <span class="grid-cell"><input name="R0-C4" type="number" min="0" max="9" value="5"/></span>
+            <span class="grid-cell"><input name="R0-C5" type="number" min="0" max="9" value="6"/></span>
+            <span class="grid-cell"><input name="R0-C6" type="number" min="0" max="9" value="7"/></span>
+            <span class="grid-cell"><input name="R0-C7" type="number" min="0" max="9" value="8"/></span>
+            <span class="grid-cell"><input name="R0-C8" type="number" min="0" max="9" value="9"/></span>
         </fieldset>
-        <fieldset class="tr" name="Row1" form="sudoku-grid" >
-            <span class="td"><input name="R1-C0" type="number" min="0" max="9" value="4"/></span>
-            <span class="td"><input name="R1-C1" type="number" min="0" max="9" value="5"/></span>
-            <span class="td"><input name="R1-C2" type="number" min="0" max="9" value="6"/></span>
-            <span class="td"><input name="R1-C3" type="number" min="0" max="9" value="7"/></span>
-            <span class="td"><input name="R1-C4" type="number" min="0" max="9" value="8"/></span>
-            <span class="td"><input name="R1-C5" type="number" min="0" max="9" value="9"/></span>
-            <span class="td"><input name="R1-C6" type="number" min="0" max="9" value="1"/></span>
-            <span class="td"><input name="R1-C7" type="number" min="0" max="9" value="2"/></span>
-            <span class="td"><input name="R1-C8" type="number" min="0" max="9" value="3"/></span>
+        <fieldset class="grid-row" name="Row1" form="grid-form">
+            <span class="grid-cell"><input name="R1-C0" type="number" min="0" max="9" value="4"/></span>
+            <span class="grid-cell"><input name="R1-C1" type="number" min="0" max="9" value="5"/></span>
+            <span class="grid-cell"><input name="R1-C2" type="number" min="0" max="9" value="6"/></span>
+            <span class="grid-cell"><input name="R1-C3" type="number" min="0" max="9" value="7"/></span>
+            <span class="grid-cell"><input name="R1-C4" type="number" min="0" max="9" value="8"/></span>
+            <span class="grid-cell"><input name="R1-C5" type="number" min="0" max="9" value="9"/></span>
+            <span class="grid-cell"><input name="R1-C6" type="number" min="0" max="9" value="1"/></span>
+            <span class="grid-cell"><input name="R1-C7" type="number" min="0" max="9" value="2"/></span>
+            <span class="grid-cell"><input name="R1-C8" type="number" min="0" max="9" value="3"/></span>
         </fieldset>
-        <fieldset class="tr" name="Row2" form="sudoku-grid" >
-            <span class="td"><input name="R2-C0" type="number" min="0" max="9" value="7"/></span>
-            <span class="td"><input name="R2-C1" type="number" min="0" max="9" value="8"/></span>
-            <span class="td"><input name="R2-C2" type="number" min="0" max="9" value="9"/></span>
-            <span class="td"><input name="R2-C3" type="number" min="0" max="9" value="1"/></span>
-            <span class="td"><input name="R2-C4" type="number" min="0" max="9" value="2"/></span>
-            <span class="td"><input name="R2-C5" type="number" min="0" max="9" value="3"/></span>
-            <span class="td"><input name="R2-C6" type="number" min="0" max="9" value="4"/></span>
-            <span class="td"><input name="R2-C7" type="number" min="0" max="9" value="5"/></span>
-            <span class="td"><input name="R2-C8" type="number" min="0" max="9" value="6"/></span>
+        <fieldset class="grid-row" name="Row2" form="grid-form">
+            <span class="grid-cell"><input name="R2-C0" type="number" min="0" max="9" value="7"/></span>
+            <span class="grid-cell"><input name="R2-C1" type="number" min="0" max="9" value="8"/></span>
+            <span class="grid-cell"><input name="R2-C2" type="number" min="0" max="9" value="9"/></span>
+            <span class="grid-cell"><input name="R2-C3" type="number" min="0" max="9" value="1"/></span>
+            <span class="grid-cell"><input name="R2-C4" type="number" min="0" max="9" value="2"/></span>
+            <span class="grid-cell"><input name="R2-C5" type="number" min="0" max="9" value="3"/></span>
+            <span class="grid-cell"><input name="R2-C6" type="number" min="0" max="9" value="4"/></span>
+            <span class="grid-cell"><input name="R2-C7" type="number" min="0" max="9" value="5"/></span>
+            <span class="grid-cell"><input name="R2-C8" type="number" min="0" max="9" value="6"/></span>
         </fieldset>
-        <fieldset class="tr" name="Row3" form="sudoku-grid" >
-            <span class="td"><input name="R3-C0" type="number" min="0" max="9" value="2"/></span>
-            <span class="td"><input name="R3-C1" type="number" min="0" max="9" value="3"/></span>
-            <span class="td"><input name="R3-C2" type="number" min="0" max="9" value="4"/></span>
-            <span class="td"><input name="R3-C3" type="number" min="0" max="9" value="5"/></span>
-            <span class="td"><input name="R3-C4" type="number" min="0" max="9" value="6"/></span>
-            <span class="td"><input name="R3-C5" type="number" min="0" max="9" value="7"/></span>
-            <span class="td"><input name="R3-C6" type="number" min="0" max="9" value="8"/></span>
-            <span class="td"><input name="R3-C7" type="number" min="0" max="9" value="9"/></span>
-            <span class="td"><input name="R3-C8" type="number" min="0" max="9" value="1"/></span>
+        <fieldset class="grid-row" name="Row3" form="grid-form">
+            <span class="grid-cell"><input name="R3-C0" type="number" min="0" max="9" value="2"/></span>
+            <span class="grid-cell"><input name="R3-C1" type="number" min="0" max="9" value="3"/></span>
+            <span class="grid-cell"><input name="R3-C2" type="number" min="0" max="9" value="4"/></span>
+            <span class="grid-cell"><input name="R3-C3" type="number" min="0" max="9" value="5"/></span>
+            <span class="grid-cell"><input name="R3-C4" type="number" min="0" max="9" value="6"/></span>
+            <span class="grid-cell"><input name="R3-C5" type="number" min="0" max="9" value="7"/></span>
+            <span class="grid-cell"><input name="R3-C6" type="number" min="0" max="9" value="8"/></span>
+            <span class="grid-cell"><input name="R3-C7" type="number" min="0" max="9" value="9"/></span>
+            <span class="grid-cell"><input name="R3-C8" type="number" min="0" max="9" value="1"/></span>
         </fieldset>
-        <fieldset class="tr" name="Row4" form="sudoku-grid" >
-            <span class="td"><input name="R4-C0" type="number" min="0" max="9" value="5"/></span>
-            <span class="td"><input name="R4-C1" type="number" min="0" max="9" value="6"/></span>
-            <span class="td"><input name="R4-C2" type="number" min="0" max="9" value="7"/></span>
-            <span class="td"><input name="R4-C3" type="number" min="0" max="9" value="8"/></span>
-            <span class="td"><input name="R4-C4" type="number" min="0" max="9" value="9"/></span>
-            <span class="td"><input name="R4-C5" type="number" min="0" max="9" value="1"/></span>
-            <span class="td"><input name="R4-C6" type="number" min="0" max="9" value="2"/></span>
-            <span class="td"><input name="R4-C7" type="number" min="0" max="9" value="3"/></span>
-            <span class="td"><input name="R4-C8" type="number" min="0" max="9" value="4"/></span>
+        <fieldset class="grid-row" name="Row4" form="grid-form">
+            <span class="grid-cell"><input name="R4-C0" type="number" min="0" max="9" value="5"/></span>
+            <span class="grid-cell"><input name="R4-C1" type="number" min="0" max="9" value="6"/></span>
+            <span class="grid-cell"><input name="R4-C2" type="number" min="0" max="9" value="7"/></span>
+            <span class="grid-cell"><input name="R4-C3" type="number" min="0" max="9" value="8"/></span>
+            <span class="grid-cell"><input name="R4-C4" type="number" min="0" max="9" value="9"/></span>
+            <span class="grid-cell"><input name="R4-C5" type="number" min="0" max="9" value="1"/></span>
+            <span class="grid-cell"><input name="R4-C6" type="number" min="0" max="9" value="2"/></span>
+            <span class="grid-cell"><input name="R4-C7" type="number" min="0" max="9" value="3"/></span>
+            <span class="grid-cell"><input name="R4-C8" type="number" min="0" max="9" value="4"/></span>
         </fieldset>
-        <fieldset class="tr" name="Row5" form="sudoku-grid" >
-            <span class="td"><input name="R5-C0" type="number" min="0" max="9" value="8"/></span>
-            <span class="td"><input name="R5-C1" type="number" min="0" max="9" value="9"/></span>
-            <span class="td"><input name="R5-C2" type="number" min="0" max="9" value="1"/></span>
-            <span class="td"><input name="R5-C3" type="number" min="0" max="9" value="2"/></span>
-            <span class="td"><input name="R5-C4" type="number" min="0" max="9" value="3"/></span>
-            <span class="td"><input name="R5-C5" type="number" min="0" max="9" value="4"/></span>
-            <span class="td"><input name="R5-C6" type="number" min="0" max="9" value="5"/></span>
-            <span class="td"><input name="R5-C7" type="number" min="0" max="9" value="6"/></span>
-            <span class="td"><input name="R5-C8" type="number" min="0" max="9" value="7"/></span>
+        <fieldset class="grid-row" name="Row5" form="grid-form">
+            <span class="grid-cell"><input name="R5-C0" type="number" min="0" max="9" value="8"/></span>
+            <span class="grid-cell"><input name="R5-C1" type="number" min="0" max="9" value="9"/></span>
+            <span class="grid-cell"><input name="R5-C2" type="number" min="0" max="9" value="1"/></span>
+            <span class="grid-cell"><input name="R5-C3" type="number" min="0" max="9" value="2"/></span>
+            <span class="grid-cell"><input name="R5-C4" type="number" min="0" max="9" value="3"/></span>
+            <span class="grid-cell"><input name="R5-C5" type="number" min="0" max="9" value="4"/></span>
+            <span class="grid-cell"><input name="R5-C6" type="number" min="0" max="9" value="5"/></span>
+            <span class="grid-cell"><input name="R5-C7" type="number" min="0" max="9" value="6"/></span>
+            <span class="grid-cell"><input name="R5-C8" type="number" min="0" max="9" value="7"/></span>
         </fieldset>
-        <fieldset class="tr" name="Row6" form="sudoku-grid" >
-            <span class="td"><input name="R6-C0" type="number" min="0" max="9" value="3"/></span>
-            <span class="td"><input name="R6-C1" type="number" min="0" max="9" value="4"/></span>
-            <span class="td"><input name="R6-C2" type="number" min="0" max="9" value="5"/></span>
-            <span class="td"><input name="R6-C3" type="number" min="0" max="9" value="6"/></span>
-            <span class="td"><input name="R6-C4" type="number" min="0" max="9" value="7"/></span>
-            <span class="td"><input name="R6-C5" type="number" min="0" max="9" value="8"/></span>
-            <span class="td"><input name="R6-C6" type="number" min="0" max="9" value="9"/></span>
-            <span class="td"><input name="R6-C7" type="number" min="0" max="9" value="1"/></span>
-            <span class="td"><input name="R6-C8" type="number" min="0" max="9" value="2"/></span>
+        <fieldset class="grid-row" name="Row6" form="grid-form">
+            <span class="grid-cell"><input name="R6-C0" type="number" min="0" max="9" value="3"/></span>
+            <span class="grid-cell"><input name="R6-C1" type="number" min="0" max="9" value="4"/></span>
+            <span class="grid-cell"><input name="R6-C2" type="number" min="0" max="9" value="5"/></span>
+            <span class="grid-cell"><input name="R6-C3" type="number" min="0" max="9" value="6"/></span>
+            <span class="grid-cell"><input name="R6-C4" type="number" min="0" max="9" value="7"/></span>
+            <span class="grid-cell"><input name="R6-C5" type="number" min="0" max="9" value="8"/></span>
+            <span class="grid-cell"><input name="R6-C6" type="number" min="0" max="9" value="9"/></span>
+            <span class="grid-cell"><input name="R6-C7" type="number" min="0" max="9" value="1"/></span>
+            <span class="grid-cell"><input name="R6-C8" type="number" min="0" max="9" value="2"/></span>
         </fieldset>
-        <fieldset class="tr" name="Row7" form="sudoku-grid" >
-            <span class="td"><input name="R7-C0" type="number" min="0" max="9" value="6"/></span>
-            <span class="td"><input name="R7-C1" type="number" min="0" max="9" value="7"/></span>
-            <span class="td"><input name="R7-C2" type="number" min="0" max="9" value="8"/></span>
-            <span class="td"><input name="R7-C3" type="number" min="0" max="9" value="9"/></span>
-            <span class="td"><input name="R7-C4" type="number" min="0" max="9" value="1"/></span>
-            <span class="td"><input name="R7-C5" type="number" min="0" max="9" value="2"/></span>
-            <span class="td"><input name="R7-C6" type="number" min="0" max="9" value="3"/></span>
-            <span class="td"><input name="R7-C7" type="number" min="0" max="9" value="4"/></span>
-            <span class="td"><input name="R7-C8" type="number" min="0" max="9" value="5"/></span>
+        <fieldset class="grid-row" name="Row7" form="grid-form">
+            <span class="grid-cell"><input name="R7-C0" type="number" min="0" max="9" value="6"/></span>
+            <span class="grid-cell"><input name="R7-C1" type="number" min="0" max="9" value="7"/></span>
+            <span class="grid-cell"><input name="R7-C2" type="number" min="0" max="9" value="8"/></span>
+            <span class="grid-cell"><input name="R7-C3" type="number" min="0" max="9" value="9"/></span>
+            <span class="grid-cell"><input name="R7-C4" type="number" min="0" max="9" value="1"/></span>
+            <span class="grid-cell"><input name="R7-C5" type="number" min="0" max="9" value="2"/></span>
+            <span class="grid-cell"><input name="R7-C6" type="number" min="0" max="9" value="3"/></span>
+            <span class="grid-cell"><input name="R7-C7" type="number" min="0" max="9" value="4"/></span>
+            <span class="grid-cell"><input name="R7-C8" type="number" min="0" max="9" value="5"/></span>
         </fieldset>
-        <fieldset class="tr" name="Row8" form="sudoku-grid" >
-            <span class="td"><input name="R8-C0" type="number" min="0" max="9" value="9"/></span>
-            <span class="td"><input name="R8-C1" type="number" min="0" max="9" value="1"/></span>
-            <span class="td"><input name="R8-C2" type="number" min="0" max="9" value="2"/></span>
-            <span class="td"><input name="R8-C3" type="number" min="0" max="9" value="3"/></span>
-            <span class="td"><input name="R8-C4" type="number" min="0" max="9" value="4"/></span>
-            <span class="td"><input name="R8-C5" type="number" min="0" max="9" value="5"/></span>
-            <span class="td"><input name="R8-C6" type="number" min="0" max="9" value="6"/></span>
-            <span class="td"><input name="R8-C7" type="number" min="0" max="9" value="7"/></span>
-            <span class="td"><input name="R8-C8" type="number" min="0" max="9" value="8"/></span>
+        <fieldset class="grid-row" name="Row8" form="grid-form">
+            <span class="grid-cell"><input name="R8-C0" type="number" min="0" max="9" value="9"/></span>
+            <span class="grid-cell"><input name="R8-C1" type="number" min="0" max="9" value="1"/></span>
+            <span class="grid-cell"><input name="R8-C2" type="number" min="0" max="9" value="2"/></span>
+            <span class="grid-cell"><input name="R8-C3" type="number" min="0" max="9" value="3"/></span>
+            <span class="grid-cell"><input name="R8-C4" type="number" min="0" max="9" value="4"/></span>
+            <span class="grid-cell"><input name="R8-C5" type="number" min="0" max="9" value="5"/></span>
+            <span class="grid-cell"><input name="R8-C6" type="number" min="0" max="9" value="6"/></span>
+            <span class="grid-cell"><input name="R8-C7" type="number" min="0" max="9" value="7"/></span>
+            <span class="grid-cell"><input name="R8-C8" type="number" min="0" max="9" value="8"/></span>
         </fieldset>
     </div>
-    <button>Verify</button>
+    <button class="verify">Verify</button>
 </form>
 </body>
 </html>

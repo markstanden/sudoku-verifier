@@ -11,7 +11,6 @@ public class VerifyHandler implements HttpHandler {
 
     /**
      * HttpHandler requires a handle function that takes a request.
-     * TODO: parse POST request
      *
      * @param exchange the encapsulated http request
      * @throws IOException
@@ -26,7 +25,7 @@ public class VerifyHandler implements HttpHandler {
                     .orElse("");
         }
 
-        int[][] grid = Grid.fromFormData(formData).to2DArray();
+        Grid grid = Grid.fromFormData(formData);
         boolean isValid = SudokuVerifier.verify(grid);
 
         String response = "<h1>Grid is " + (isValid ? "Valid" : "Invalid") + "</h1>";
