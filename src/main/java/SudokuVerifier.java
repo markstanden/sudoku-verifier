@@ -2,7 +2,6 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class SudokuVerifier {
     public static final int[] VALID_NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -33,7 +32,7 @@ public class SudokuVerifier {
      * Solution is Invalid
      * To the console.
      */
-    private void verifySolution() {
+    public void verifySolution() {
         System.out.println("Solution is ".concat(gridIsValid() ? "Valid" : "Invalid"));
     }
 
@@ -45,7 +44,7 @@ public class SudokuVerifier {
     private boolean gridIsValid() {
         return checkAllRows()
                 && checkAllColumns()
-                && functionalCheckAllBlocks();
+                && checkAllBlocks();
     }
 
     /**
@@ -62,6 +61,12 @@ public class SudokuVerifier {
                 .collect(Collectors.toSet());
     }
 
+    private Set<Integer> intStreamToSet(IntStream intStream) {
+        return intStream.parallel()
+                .boxed()
+                .collect(Collectors.toSet());
+    }
+
     /**
      * Validates that the group being tested is valid.
      *
@@ -72,27 +77,44 @@ public class SudokuVerifier {
         return set.containsAll(arrayToSet(VALID_NUMBERS));
     }
 
+
     /**
      * Checks all rows for validity.
      *
      * @return true if valid, false if invalid.
      */
     private boolean checkAllRows() {
-        return Stream.of(grid.to2DArray()).parallel()
-                .map(this::arrayToSet)
-                .allMatch(this::isValidSet);
+        return grid.rowStream()
+                .parallel()
+                .allMatch(this::checkRow);
     }
+
 
     /**
      * Checks individual row for validity.
-     * Not actually used, but included for completeness.
      *
      * @param row the index of the row to be tested
      * @return true if valid, false if invalid.
      */
     private boolean checkRow(final int row) {
-        return isValidSet(arrayToSet(grid.to2DArray()[row]));
+        return checkRow(grid.getRowAsStream(row));
     }
+
+
+    /**
+     * Checks individual row stream for validity.
+     *
+     * @param row the IntStream of the row to be tested
+     * @return true if valid, false if invalid.
+     */
+    private boolean checkRow(final IntStream row) {
+        return isValidSet(
+                row.parallel()
+                        .boxed()
+                        .collect(Collectors.toSet())
+        );
+    }
+
 
     /**
      * Checks all columns for validity.
@@ -101,10 +123,11 @@ public class SudokuVerifier {
      * @return true if all blocks are valid.
      */
     private boolean checkAllColumns() {
-        return IntStream.range(0, grid.to2DArray()[0].length)
+        return grid.colStream()
                 .parallel()
-                .allMatch(column -> checkAColumn(column));
+                .allMatch(this::checkAColumn);
     }
+
 
     /**
      * Checks a single column for validity.
@@ -114,15 +137,25 @@ public class SudokuVerifier {
      * @return true if all blocks are valid.
      */
     private boolean checkAColumn(final int column) {
+        return checkAColumn(grid.getColAsStream(column));
+    }
+
+
+    /**
+     * Checks a single column for validity.
+     * Using parallel streams.
+     *
+     * @param column The IntStream of the column to be verified
+     * @return true if all blocks are valid.
+     */
+    private boolean checkAColumn(IntStream column) {
         return isValidSet(
-                Arrays.stream(grid.to2DArray())
-                        .parallel()
-                        .mapToInt(row -> row[column])
+                column.parallel()
                         .boxed()
                         .collect(Collectors.toSet())
         );
-
     }
+
 
     /**
      * Checks all blocks for validity.
@@ -130,7 +163,7 @@ public class SudokuVerifier {
      *
      * @return true if all blocks are valid.
      */
-    private boolean functionalCheckAllBlocks() {
+    private boolean checkAllBlocks() {
         final int NUM_OF_BLOCKS = grid.to2DArray()[0].length / BLOCK_SIZE;
 
         return IntStream.iterate(0, x -> x + BLOCK_SIZE)
@@ -139,7 +172,7 @@ public class SudokuVerifier {
                 .allMatch(firstCol -> IntStream.iterate(0, x -> x + BLOCK_SIZE)
                         .limit(NUM_OF_BLOCKS)
                         .parallel()
-                        .allMatch(firstRow -> functionalCheckABlock(firstRow, firstCol))
+                        .allMatch(firstRow -> checkABlock(firstRow, firstCol))
                 );
     }
 
@@ -150,7 +183,7 @@ public class SudokuVerifier {
      * @param firstCol The index of the left hand column of the block
      * @return true if the block is valid
      */
-    private boolean functionalCheckABlock(final int firstRow, final int firstCol) {
+    private boolean checkABlock(final int firstRow, final int firstCol) {
         return isValidSet(
                 IntStream.range(firstRow, firstRow + BLOCK_SIZE)
                         .parallel()
