@@ -43,13 +43,15 @@ public class SudokuVerifier {
 
     /**
      * Checks whether the grid is valid.
+     * Collects and parallel checks all rows, columns and blocks.
      *
      * @return returns true if the supplied grid is valid, false if invalid
      */
     private boolean gridIsValid() {
-        return Stream.of(checkAllRows(), checkAllColumns(), checkAllBlocks())
+        return Stream.of(grid.rowStream(), grid.colStream(), grid.blockStream())
+                .flatMap(x -> x)
                 .parallel()
-                .allMatch(function -> function);
+                .allMatch(this::checkAGroup);
     }
 
     /**
