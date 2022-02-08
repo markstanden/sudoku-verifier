@@ -2,13 +2,19 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class SudokuVerifier {
-    public static final int[] VALID_NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    public static final int BLOCK_SIZE = 3;
+    public static final Set<Integer> VALID_NUMBERS = arrayToSet(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9});
 
     private final Grid grid;
 
+    /**
+     * Private constructor to force use of
+     * verify static method to create object.
+     *
+     * @param solution The solution to verify
+     */
     private SudokuVerifier(final Grid solution) {
         this.grid = solution;
     }
@@ -27,10 +33,9 @@ public class SudokuVerifier {
     /**
      * Prints a message to the console informing
      * the user whether the grid is valid or not.
-     * Prints either:
+     * Prints to the console either:
      * Solution is Valid
      * Solution is Invalid
-     * To the console.
      */
     public void verifySolution() {
         System.out.println("Solution is ".concat(gridIsValid() ? "Valid" : "Invalid"));
@@ -42,39 +47,22 @@ public class SudokuVerifier {
      * @return returns true if the supplied grid is valid, false if invalid
      */
     private boolean gridIsValid() {
-        return checkAllRows()
-                && checkAllColumns()
-                && checkAllBlocks();
+        return Stream.of(checkAllRows(), checkAllColumns(), checkAllBlocks())
+                .parallel()
+                .allMatch(function -> function);
     }
 
     /**
-     * The workhorse of the verifier, it converts an
-     * array into an unordered set and returns it.
+     * Converts an array into an unordered set and returns it.
      *
      * @param array The array to convert to a set.
      * @return An unordered set of the contents of the array.
      */
-    private Set<Integer> arrayToSet(final int[] array) {
+    private static Set<Integer> arrayToSet(final int[] array) {
         return Arrays.stream(array)
                 .parallel()
                 .boxed()
                 .collect(Collectors.toSet());
-    }
-
-    private Set<Integer> intStreamToSet(IntStream intStream) {
-        return intStream.parallel()
-                .boxed()
-                .collect(Collectors.toSet());
-    }
-
-    /**
-     * Validates that the group being tested is valid.
-     *
-     * @param set the set to be tested, whether a row, column or block.
-     * @return true if valid, false if invalid.
-     */
-    private boolean isValidSet(Set<Integer> set) {
-        return set.containsAll(arrayToSet(VALID_NUMBERS));
     }
 
 
@@ -84,35 +72,7 @@ public class SudokuVerifier {
      * @return true if valid, false if invalid.
      */
     private boolean checkAllRows() {
-        return grid.rowStream()
-                .parallel()
-                .allMatch(this::checkRow);
-    }
-
-
-    /**
-     * Checks individual row for validity.
-     *
-     * @param row the index of the row to be tested
-     * @return true if valid, false if invalid.
-     */
-    private boolean checkRow(final int row) {
-        return checkRow(grid.getRowAsStream(row));
-    }
-
-
-    /**
-     * Checks individual row stream for validity.
-     *
-     * @param row the IntStream of the row to be tested
-     * @return true if valid, false if invalid.
-     */
-    private boolean checkRow(final IntStream row) {
-        return isValidSet(
-                row.parallel()
-                        .boxed()
-                        .collect(Collectors.toSet())
-        );
+        return groupStreamIsValid(grid.rowStream());
     }
 
 
@@ -123,39 +83,8 @@ public class SudokuVerifier {
      * @return true if all blocks are valid.
      */
     private boolean checkAllColumns() {
-        return grid.colStream()
-                .parallel()
-                .allMatch(this::checkAColumn);
+        return groupStreamIsValid(grid.colStream());
     }
-
-
-    /**
-     * Checks a single column for validity.
-     * Using parallel streams.
-     *
-     * @param column the index of the column to be verified
-     * @return true if all blocks are valid.
-     */
-    private boolean checkAColumn(final int column) {
-        return checkAColumn(grid.getColAsStream(column));
-    }
-
-
-    /**
-     * Checks a single column for validity.
-     * Using parallel streams.
-     *
-     * @param column The IntStream of the column to be verified
-     * @return true if all blocks are valid.
-     */
-    private boolean checkAColumn(IntStream column) {
-        return isValidSet(
-                column.parallel()
-                        .boxed()
-                        .collect(Collectors.toSet())
-        );
-    }
-
 
     /**
      * Checks all blocks for validity.
@@ -164,33 +93,43 @@ public class SudokuVerifier {
      * @return true if all blocks are valid.
      */
     private boolean checkAllBlocks() {
-        final int NUM_OF_BLOCKS = grid.to2DArray()[0].length / BLOCK_SIZE;
+        return groupStreamIsValid(grid.blockStream());
+    }
 
-        return IntStream.iterate(0, x -> x + BLOCK_SIZE)
-                .limit(NUM_OF_BLOCKS)
+
+    /**
+     * Checks a stream for validity.
+     * Using parallel streams.
+     *
+     * @return true if all blocks are valid.
+     */
+    private boolean groupStreamIsValid(Stream<IntStream> groupStream) {
+        return groupStream
                 .parallel()
-                .allMatch(firstCol -> IntStream.iterate(0, x -> x + BLOCK_SIZE)
-                        .limit(NUM_OF_BLOCKS)
-                        .parallel()
-                        .allMatch(firstRow -> checkABlock(firstRow, firstCol))
-                );
+                .allMatch(this::checkAGroup);
+    }
+
+
+    /**
+     * Converts an IntStream into an unordered set for comparison
+     *
+     * @param intStream The IntStream to collect the values from
+     * @return An unordered set of the values from the stream.
+     */
+    private Set<Integer> intStreamToSet(IntStream intStream) {
+        return intStream.parallel()
+                .boxed()
+                .collect(Collectors.toSet());
     }
 
     /**
-     * Checks the validity of a single block
+     * Checks individual group stream (row, column, block) for validity.
      *
-     * @param firstRow The index of the top row of the block
-     * @param firstCol The index of the left hand column of the block
-     * @return true if the block is valid
+     * @param group the IntStream of the row to be tested
+     * @return true if valid, false if invalid.
      */
-    private boolean checkABlock(final int firstRow, final int firstCol) {
-        return isValidSet(
-                IntStream.range(firstRow, firstRow + BLOCK_SIZE)
-                        .parallel()
-                        .mapToObj(blockRow -> Arrays.copyOfRange(grid.to2DArray()[blockRow], firstCol, firstCol + BLOCK_SIZE))
-                        .flatMapToInt(blockArray -> Arrays.stream(blockArray))
-                        .boxed()
-                        .collect(Collectors.toSet())
-        );
+    private boolean checkAGroup(final IntStream group) {
+        return intStreamToSet(group).containsAll(VALID_NUMBERS);
     }
+
 }

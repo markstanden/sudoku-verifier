@@ -37,6 +37,11 @@ class SudokuVerifierTest extends ConsoleTest {
     }
 
     @Test
+    public void InvalidValidBlocksInvalidRowsAndColsReturnsInvalid() {
+        assertFalse(SudokuVerifier.verify(new Grid(TestGrids.INVALID_REGULAR_BLOCKS)));
+    }
+
+    @Test
     public void InvalidLastValueReturnsInvalid() {
         assertFalse(SudokuVerifier.verify(new Grid(TestGrids.INVALID_LAST)));
     }
