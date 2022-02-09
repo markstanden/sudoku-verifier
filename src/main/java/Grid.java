@@ -1,6 +1,4 @@
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -12,51 +10,18 @@ import java.util.stream.Stream;
  * @author Mark Standen
  * @version 1.0.0
  */
-public class Grid {
-    public final int BLOCK_SIZE = 3;
+public abstract class Grid {
+    public final int GRID_SIZE;
+    public final int BLOCK_SIZE;
     public final int NUM_OF_BLOCKS_PER_ROW;
-
-    public static final String WEBFORM_REGEX = "R[0-8]-C[0-8]=([0-9]?)(?=&|$)";
 
     private final int[][] grid;
 
-    public Grid(int[][] arrayData) {
+    public Grid(final int[][] arrayData, final int blockSize) {
         this.grid = arrayData;
-        NUM_OF_BLOCKS_PER_ROW = grid[0].length / BLOCK_SIZE;
-    }
-
-    /**
-     * Return a new grid object from supplied form data.
-     * Assumes passed string not sanitised and will return null if string is not
-     * in expected format.
-     *
-     * @param formQuery the data string received from the front end form request.
-     *                  this should progress left to right, top to bottom.
-     *                  R0-C0=0&R0-C1=0&...
-     * @return new Grid object
-     */
-    public static Grid fromFormData(String formQuery) {
-        Pattern regexPattern = Pattern.compile(WEBFORM_REGEX);
-        Matcher regexMatcher = regexPattern.matcher(formQuery);
-
-        int[] safe = regexMatcher.results()
-                .map(matchResult -> matchResult.group(1))
-
-                /*  The webform can have empty values,
-                these have been matched by the regex expression,
-                but empty values will break the grid, so replace with 0.  */
-                .map(match -> match.isBlank() ? "0" : match)
-                .mapToInt(Integer::valueOf)
-                .toArray();
-
-
-        int[][] out = IntStream.range(0, 9)
-                .mapToObj(row ->
-                        Arrays.copyOfRange(safe, 9 * row, 9 * (row + 1))
-                )
-                .toArray(int[][]::new);
-
-        return new Grid(out);
+        BLOCK_SIZE = blockSize;
+        GRID_SIZE = grid[0].length;
+        NUM_OF_BLOCKS_PER_ROW = GRID_SIZE / BLOCK_SIZE;
     }
 
 

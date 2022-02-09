@@ -25,7 +25,7 @@ public class VerifyHandler implements HttpHandler {
                     .orElse("");
         }
 
-        Grid grid = Grid.fromFormData(formData);
+        Grid grid = SudokuGrid.fromFormData(formData);
         boolean isValid = SudokuVerifier.verify(grid);
 
         String response = "<h1>Grid is " + (isValid ? "Valid" : "Invalid") + "</h1>";
