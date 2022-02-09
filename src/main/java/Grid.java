@@ -1,8 +1,6 @@
 import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -33,8 +31,8 @@ public class Grid {
      * in expected format.
      *
      * @param formQuery the data string received from the front end form request.
-     *                 this should progress left to right, top to bottom.
-     *                 R0-C0=0&R0-C1=0&...
+     *                  this should progress left to right, top to bottom.
+     *                  R0-C0=0&R0-C1=0&...
      * @return new Grid object
      */
     public static Grid fromFormData(String formQuery) {
@@ -94,12 +92,13 @@ public class Grid {
      * Streams progress from top row to bottom row,
      * with each row progressing left to right.
      * <p>
-     * Row      Row 'index'
-     * Order
-     * A       0 1 2 3 4 5
-     * B       0 1 2 3 4 5
-     * C       0 1 2 3 4 5
-     * D       0 1 2 3 4 5
+     * <table>
+     * <tr><td> Row Order   </td><td>  ==>  </td><td> Row 'index'   </td></tr>
+     * <tr><td> RowA        </td><td>       </td><td> 0 1 2 3 4 5...</td></tr>
+     * <tr><td> RowB        </td><td>       </td><td> 0 1 2 3 4 5...</td></tr>
+     * <tr><td> RowC        </td><td>       </td><td> 0 1 2 3 4 5...</td></tr>
+     * <tr><td> RowD        </td><td>       </td><td> 0 1 2 3 4 5...</td></tr>
+     * </table>
      */
     public Stream<IntStream> rowStream() {
         return Stream.of(grid)
