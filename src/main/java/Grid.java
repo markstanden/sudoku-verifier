@@ -73,7 +73,7 @@ public class Grid {
 
 
     /**
-     * Produces a stream to represent the row.
+     * Produces an ordered stream to represent the row.
      *
      * @return An IntStream of sequential cell values
      * representing the row
@@ -122,18 +122,22 @@ public class Grid {
 
 
     /**
-     * Produces a stream of column streams to represent the grid.
+     * Produces an ordered stream of column streams to represent the grid.
+     * Each column is an IntStream (essentially a Stream&lt;int&gt;)
      *
      * @return A Stream of sequential IntStreams
      * representing the grid.
      * Streams progress from left column to right column,
      * with each column starting at the top.
-     * <p>
-     * Column Order:       A B C D E F...
-     * Column 'index':     0 0 0 0 0 0
-     * 1 1 1 1 1 1
-     * 2 2 2 2 2 2
-     * etc.
+     * <pre>
+     *
+     * Column:      A   B   C   D   E   F       <br>
+     * Order:       1   6   11  16  21  26      <br>
+     *              2   7   12  17  22  27      <br>
+     *              3   8   13  18  23  28      <br>
+     *              4   9   14  19  24  29      <br>
+     *              5   10  15  20  25  30      <br>
+     * </pre>
      */
     public Stream<IntStream> colStream() {
         return IntStream.range(0, grid[0].length)
