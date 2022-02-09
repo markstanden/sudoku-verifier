@@ -92,13 +92,13 @@ public class Grid {
      * Streams progress from top row to bottom row,
      * with each row progressing left to right.
      * <p>
-     * <table>
-     * <tr><td> Row Order   </td><td>  ==>  </td><td> Row 'index'   </td></tr>
-     * <tr><td> RowA        </td><td>       </td><td> 0 1 2 3 4 5...</td></tr>
-     * <tr><td> RowB        </td><td>       </td><td> 0 1 2 3 4 5...</td></tr>
-     * <tr><td> RowC        </td><td>       </td><td> 0 1 2 3 4 5...</td></tr>
-     * <tr><td> RowD        </td><td>       </td><td> 0 1 2 3 4 5...</td></tr>
-     * </table>
+     * <pre>
+     * Row Order    ==>     Row 'index'         <br/>
+     * RowA                 0 1 2 3 4 5...      <br/>
+     * RowB                 0 1 2 3 4 5...      <br/>
+     * RowC                 0 1 2 3 4 5...      <br/>
+     * RowD                 0 1 2 3 4 5...      <br/>
+     * <pre>
      */
     public Stream<IntStream> rowStream() {
         return Stream.of(grid)
@@ -131,12 +131,12 @@ public class Grid {
      * with each column starting at the top.
      * <pre>
      *
-     * Column:      A   B   C   D   E   F       <br>
-     * Order:       1   6   11  16  21  26      <br>
-     *              2   7   12  17  22  27      <br>
-     *              3   8   13  18  23  28      <br>
-     *              4   9   14  19  24  29      <br>
-     *              5   10  15  20  25  30      <br>
+     * Column:      A   B   C   D   E   F       <br/>
+     * Order:       1   6   11  16  21  26      <br/>
+     *              2   7   12  17  22  27      <br/>
+     *              3   8   13  18  23  28      <br/>
+     *              4   9   14  19  24  29      <br/>
+     *              5   10  15  20  25  30      <br/>
      * </pre>
      */
     public Stream<IntStream> colStream() {
@@ -153,9 +153,11 @@ public class Grid {
      * representing the column
      * The IntStream progresses left to right, top to bottom.
      * <p>
-     * 1st row, cells 1 to 3 ----> A B C
-     * 2nd row, cells 4 to 6 ----> D E F
-     * 3rd row, cells 7 to 9 ----> G H I
+     * <pre>
+     * 1st row, cells 1 to 3    ===>    A  B  C     <br/>
+     * 2nd row, cells 4 to 6    ===>    D  E  F     <br/>
+     * 3rd row, cells 7 to 9    ===>    G  H  I     <br/>
+     * </pre>
      */
     public IntStream getBlockAsStream(final int firstRow, final int firstCol) {
         return IntStream.range(firstRow, firstRow + BLOCK_SIZE)
@@ -172,9 +174,11 @@ public class Grid {
      * representing the grid.
      * Streams progress left to right, top to bottom.
      * <p>
-     * 1st to 3rd Blocks ----> A B C
-     * 4th to 6th Blocks ----> D E F
-     * 7th to 9th Blocks ----> G H I
+     * <pre>
+     * 1st to 3rd Blocks    ===>    A  B  C     <br/>
+     * 4th to 6th Blocks    ===>    D  E  F     <br/>
+     * 7th to 9th Blocks    ===>    G  H  I     <br/>
+     * </pre>
      */
     public Stream<IntStream> blockStream() {
         return IntStream.range(0, NUM_OF_BLOCKS_PER_ROW)
