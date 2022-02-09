@@ -1,3 +1,4 @@
+import Resources.SudokuTestGrids;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -5,44 +6,13 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class GridTest {
-
-    @Test
-    void fromRealFormDataVALID_REGULAR() {
-        Grid testGrid = SudokuGrid.fromFormData(SampleFormData.VALID_REGULAR);
-        assertArrayEquals(TestGrids.VALID_REGULAR, testGrid.as2DArray());
-    }
+class SudokuGridTest {
 
     @Test
-    void fromMockFormDataVALID_REGULAR() {
-        Grid testGrid = SudokuGrid.fromFormData(SampleFormData.createTestString(TestGrids.VALID_REGULAR));
-        assertArrayEquals(TestGrids.VALID_REGULAR, testGrid.as2DArray());
-    }
-
-    @Test
-    void fromMockFormDataVALID() {
-        Grid testGrid = SudokuGrid.fromFormData(SampleFormData.createTestString(TestGrids.VALID));
-        assertArrayEquals(TestGrids.VALID, testGrid.as2DArray());
-    }
-
-    @Test
-    void fromMockFormDataALL_EMPTY() {
-        Grid testGrid = SudokuGrid.fromFormData(SampleFormData.ALL_EMPTY);
-        assertArrayEquals(TestGrids.INVALID_ALL_ZEROES, testGrid.as2DArray());
-    }
-
-    @Test
-    void fromMockFormDataALL_ZEROES() {
-        Grid testGrid = SudokuGrid.fromFormData(SampleFormData.createTestString(TestGrids.INVALID_ALL_ZEROES));
-        assertArrayEquals(TestGrids.INVALID_ALL_ZEROES, testGrid.as2DArray());
-    }
-
-
-    @Test
-    void validTo2DArray() {
-        Grid testGrid = new SudokuGrid(TestGrids.VALID_REGULAR);
-        assertArrayEquals(TestGrids.VALID_REGULAR, testGrid.as2DArray());
+    void constructorNULL() {
+        assertThrows(NullPointerException.class, () -> new SudokuGrid(null));
     }
 
     @Test
@@ -59,7 +29,7 @@ class GridTest {
                 Arrays.stream(new int[]{4, 5, 6, 7, 8, 9, 1, 2, 3}),
                 Arrays.stream(new int[]{8, 6, 9, 1, 2, 3, 4, 5, 6})
         });
-        Grid testGrid = new SudokuGrid(TestGrids.INVALID_COLS);
+        Grid testGrid = new SudokuGrid(SudokuTestGrids.INVALID_COLS);
         assertArrayEquals(testStream.flatMapToInt(x -> x).toArray(), testGrid.rowStream().flatMapToInt(x -> x).toArray());
     }
 
@@ -76,7 +46,7 @@ class GridTest {
                 Arrays.stream(new int[]{4, 5, 6, 7, 8, 9, 1, 2, 3}),
                 Arrays.stream(new int[]{7, 8, 9, 1, 2, 3, 4, 5, 6})
         });
-        Grid testGrid = new SudokuGrid(TestGrids.INVALID_ROWS);
+        Grid testGrid = new SudokuGrid(SudokuTestGrids.INVALID_ROWS);
         assertArrayEquals(testStream.flatMapToInt(x -> x).toArray(), testGrid.colStream().flatMapToInt(x -> x).toArray());
     }
 
@@ -93,7 +63,7 @@ class GridTest {
                 Arrays.stream(new int[]{8, 6, 4, 1, 8, 2, 9, 5, 7}),
                 Arrays.stream(new int[]{5, 9, 2, 6, 7, 3, 8, 1, 4}),
         });
-        Grid testGrid = new SudokuGrid(TestGrids.INVALID_BLOCKS_MINIMAL);
+        Grid testGrid = new SudokuGrid(SudokuTestGrids.INVALID_BLOCKS_MINIMAL);
         assertArrayEquals(testStream.flatMapToInt(x -> x).toArray(), testGrid.blockStream().flatMapToInt(x -> x).toArray());
     }
 
@@ -111,7 +81,7 @@ class GridTest {
                 Arrays.stream(new int[]{4, 5, 6, 7, 8, 9, 1, 2, 3}),
                 Arrays.stream(new int[]{8, 6, 9, 1, 2, 3, 4, 5, 6})
         };
-        Grid testGrid = new SudokuGrid(TestGrids.INVALID_COLS);
+        Grid testGrid = new SudokuGrid(SudokuTestGrids.INVALID_COLS);
         IntStream.range(0, 9)
                 .forEach(row -> assertArrayEquals(testStream[row].toArray(),
                         testGrid.getRowAsStream(row).toArray(),
@@ -132,7 +102,7 @@ class GridTest {
                 Arrays.stream(new int[]{4, 5, 6, 7, 8, 9, 1, 2, 3}),
                 Arrays.stream(new int[]{7, 8, 9, 1, 2, 3, 4, 5, 6})
         };
-        Grid testGrid = new SudokuGrid(TestGrids.INVALID_ROWS);
+        Grid testGrid = new SudokuGrid(SudokuTestGrids.INVALID_ROWS);
         IntStream.range(0, 9)
                 .forEach(col -> assertArrayEquals(testStream[col].toArray(),
                         testGrid.getColAsStream(col).toArray(),
@@ -142,7 +112,7 @@ class GridTest {
 
     @Test
     void blockAsStream() {
-        Grid testGrid = new SudokuGrid(TestGrids.INVALID_BLOCKS_MINIMAL);
+        Grid testGrid = new SudokuGrid(SudokuTestGrids.INVALID_BLOCKS_MINIMAL);
         assertArrayEquals(new int[]{2, 4, 1, 7, 3, 5, 8, 6, 9}, testGrid.getBlockAsStream(0, 0).toArray());
         assertArrayEquals(new int[]{6, 9, 5, 4, 2, 8, 7, 3, 1}, testGrid.getBlockAsStream(0, 3).toArray());
         assertArrayEquals(new int[]{3, 8, 7, 1, 6, 9, 4, 2, 5}, testGrid.getBlockAsStream(0, 6).toArray());

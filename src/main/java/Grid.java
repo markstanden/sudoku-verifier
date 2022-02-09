@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -11,17 +12,40 @@ import java.util.stream.Stream;
  * @version 1.0.0
  */
 public abstract class Grid {
-    public final int GRID_SIZE;
-    public final int BLOCK_SIZE;
-    public final int NUM_OF_BLOCKS_PER_ROW;
+    public final int GRID_WIDTH;
+    public final int GRID_HEIGHT;
+
+    public final int BLOCK_WIDTH;
+    public final int BLOCK_HEIGHT;
+
+    public final int BLOCKS_PER_ROW;
+    public final int BLOCKS_PER_COLUMN;
 
     private final int[][] grid;
 
-    public Grid(final int[][] arrayData, final int blockSize) {
-        this.grid = arrayData;
-        BLOCK_SIZE = blockSize;
-        GRID_SIZE = grid[0].length;
-        NUM_OF_BLOCKS_PER_ROW = GRID_SIZE / BLOCK_SIZE;
+    public Grid(final int[][] grid2dArray, final int blockHeight, final int blockWidth)
+    throws NullPointerException {
+        Objects.requireNonNull(grid2dArray, "The grid supplied cannot be null");
+        this.grid = grid2dArray;
+
+        GRID_WIDTH = grid[0].length;
+        GRID_HEIGHT = grid.length;
+
+        BLOCK_WIDTH = blockWidth;
+        BLOCK_HEIGHT = blockHeight;
+
+
+        if(GRID_WIDTH % BLOCK_WIDTH != 0) {
+            throw new IllegalArgumentException(
+                    String.format("Supplied block width (%d) does fit cleanly into supplied array row (%d)",BLOCK_WIDTH, GRID_WIDTH));
+        }
+        BLOCKS_PER_ROW = GRID_WIDTH / BLOCK_WIDTH;
+
+        if(GRID_HEIGHT % BLOCK_HEIGHT != 0) {
+            throw new IllegalArgumentException(
+                    String.format("Supplied block height (%d) does fit cleanly into supplied array columns (%d)",BLOCK_HEIGHT, GRID_HEIGHT));
+        }
+        BLOCKS_PER_COLUMN = GRID_HEIGHT / BLOCK_HEIGHT;
     }
 
 
@@ -125,9 +149,9 @@ public abstract class Grid {
      * </pre>
      */
     public IntStream getBlockAsStream(final int firstRow, final int firstCol) {
-        return IntStream.range(firstRow, firstRow + BLOCK_SIZE)
+        return IntStream.range(firstRow, firstRow + BLOCK_WIDTH)
                 .sequential()
-                .mapToObj(blockRow -> Arrays.copyOfRange(grid[blockRow], firstCol, firstCol + BLOCK_SIZE))
+                .mapToObj(blockRow -> Arrays.copyOfRange(grid[blockRow], firstCol, firstCol + BLOCK_WIDTH))
                 .flatMapToInt(Arrays::stream);
     }
 
@@ -146,10 +170,10 @@ public abstract class Grid {
      * </pre>
      */
     public Stream<IntStream> blockStream() {
-        return IntStream.range(0, NUM_OF_BLOCKS_PER_ROW)
+        return IntStream.range(0, BLOCKS_PER_ROW)
                 .sequential()
-                .mapToObj(firstRow -> IntStream.range(0, NUM_OF_BLOCKS_PER_ROW)
-                        .mapToObj(firstCol -> getBlockAsStream(firstRow * BLOCK_SIZE, firstCol * BLOCK_SIZE))
+                .mapToObj(firstRow -> IntStream.range(0, BLOCKS_PER_ROW)
+                        .mapToObj(firstCol -> getBlockAsStream(firstRow * BLOCK_WIDTH, firstCol * BLOCK_WIDTH))
                 ).flatMap(x -> x);  // Merges Stream<Stream> -> Stream
     }
 }

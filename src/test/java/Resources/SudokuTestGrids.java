@@ -1,5 +1,7 @@
-public abstract class TestGrids {
-    public static final int[][] VALID = {
+package Resources;
+
+public abstract class SudokuTestGrids {
+    public static final int[][] VALID_REAL = {
             {2, 4, 1, 6, 9, 5, 3, 8, 7},
             {7, 3, 5, 4, 2, 8, 1, 6, 9},
             {8, 6, 9, 7, 3, 1, 4, 2, 5},
@@ -107,7 +109,7 @@ public abstract class TestGrids {
             {3, 2, 6, 9, 5, 7, 8, 1, 4}
     };
 
-    public static final int[][] INVALID_ALL_ZEROES = {
+    public static final int[][] ALL_ZEROES = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0},

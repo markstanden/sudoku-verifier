@@ -14,13 +14,12 @@ import java.util.stream.Stream;
  */
 public class SudokuGrid extends Grid {
     public static final int BLOCK_SIZE = 3;
-    public static final int NUM_OF_BLOCKS_PER_ROW = 3;
     public static final int GRID_LENGTH = 9;
 
     public static final String WEBFORM_REGEX = "R[0-8]-C[0-8]=([0-9]?)(?=&|$)";
 
     public SudokuGrid(int[][] arrayData) {
-        super(arrayData, SudokuGrid.BLOCK_SIZE);
+        super(arrayData, SudokuGrid.BLOCK_SIZE, SudokuGrid.BLOCK_SIZE);
     }
 
     /**
