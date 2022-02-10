@@ -31,6 +31,19 @@ public class SudokuVerifier {
     }
 
     /**
+     * Converts an array into an unordered set and returns it.
+     *
+     * @param array The array to convert to a set.
+     * @return An unordered set of the contents of the array.
+     */
+    private static Set<Integer> arrayToSet(final int[] array) {
+        return Arrays.stream(array)
+                .parallel()
+                .boxed()
+                .collect(Collectors.toSet());
+    }
+
+    /**
      * Prints a message to the console informing
      * the user whether the grid is valid or not.
      * Prints to the console either:
@@ -53,20 +66,6 @@ public class SudokuVerifier {
                 .parallel()
                 .allMatch(this::checkAGroup);
     }
-
-    /**
-     * Converts an array into an unordered set and returns it.
-     *
-     * @param array The array to convert to a set.
-     * @return An unordered set of the contents of the array.
-     */
-    private static Set<Integer> arrayToSet(final int[] array) {
-        return Arrays.stream(array)
-                .parallel()
-                .boxed()
-                .collect(Collectors.toSet());
-    }
-
 
     /**
      * Checks all rows for validity.
