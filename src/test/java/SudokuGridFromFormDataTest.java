@@ -1,3 +1,4 @@
+import Resources.Converters;
 import Resources.SampleFormData;
 import Resources.SudokuTestGrids;
 import org.junit.jupiter.api.Test;
@@ -14,13 +15,13 @@ class SudokuGridFromFormDataTest {
 
     @Test
     void MockDataVALID_REGULAR() {
-        Grid<Integer> testGrid = SudokuGrid.fromFormData(SampleFormData.createTestString(SudokuTestGrids.VALID_REGULAR));
+        Grid<Integer> testGrid = SudokuGrid.fromFormData(Converters.mockFormDataFromTestGrid(SudokuTestGrids.VALID_REGULAR));
         assertEquals(SudokuTestGrids.VALID_REGULAR, testGrid.getGrid());
     }
 
     @Test
     void MockDataVALID() {
-        Grid<Integer> testGrid = SudokuGrid.fromFormData(SampleFormData.createTestString(SudokuTestGrids.VALID_REAL));
+        Grid<Integer> testGrid = SudokuGrid.fromFormData(Converters.mockFormDataFromTestGrid(SudokuTestGrids.VALID_REAL));
         assertEquals(SudokuTestGrids.VALID_REAL, testGrid.getGrid());
     }
 
@@ -32,7 +33,7 @@ class SudokuGridFromFormDataTest {
 
     @Test
     void MockDataALL_ZEROES() {
-        Grid<Integer> testGrid = SudokuGrid.fromFormData(SampleFormData.createTestString(SudokuTestGrids.ALL_ZEROES));
+        Grid<Integer> testGrid = SudokuGrid.fromFormData(Converters.mockFormDataFromTestGrid(SudokuTestGrids.ALL_ZEROES));
         assertEquals(SudokuTestGrids.ALL_ZEROES, testGrid.getGrid());
     }
 

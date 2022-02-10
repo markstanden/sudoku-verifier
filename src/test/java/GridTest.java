@@ -1,9 +1,7 @@
 import Resources.Converters;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static Resources.TestGrids.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class GridTest
 {
 
-	class BasicGrid extends Grid<Integer>
+	static class BasicGrid extends Grid<Integer>
 	{
 		public BasicGrid(List<List<Integer>> testGrid, int blockHeight, int blockWidth)
 		{

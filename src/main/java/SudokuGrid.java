@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,45 +23,6 @@ public class SudokuGrid extends Grid<Integer>
 	{
 		super(listOfIntegerList, SudokuGrid.BLOCK_SIZE, SudokuGrid.BLOCK_SIZE);
 	}
-
-//	public SudokuGrid(Integer[][] integerArray)
-//	{
-//		super(Grid.convert2DArrayTo2DList(integerArray), SudokuGrid.BLOCK_SIZE, SudokuGrid.BLOCK_SIZE);
-//	}
-//
-//
-//
-//	public SudokuGrid(int[][] arrayData)
-//	{
-//		this(SudokuGrid.convertPrimitiveGrid(arrayData));
-//	}
-
-
-
-	/**
-	 * converts a 2D boxed integer array into a primitive 2D int array.
-	 *
-	 * @param grid array to be converted
-	 * @return boxed integer 2D array.
-	 */
-	public static Integer[][] convertPrimitiveGrid(int[][] grid)
-	{
-		return Arrays.stream(grid)
-				.sequential()
-				.map(rowStream -> Arrays.stream(rowStream)
-						.boxed()
-						.toArray(Integer[]::new))
-				.toArray(Integer[][]::new);
-	}
-
-	public static Integer[][] convertList(List<List<Integer>> grid)
-	{
-		return grid.stream()
-				.sequential()
-				.map(list -> list.toArray(Integer[]::new))
-				.toArray(Integer[][]::new);
-	}
-
 
 	/**
 	 * Return a new grid object from supplied form data.
