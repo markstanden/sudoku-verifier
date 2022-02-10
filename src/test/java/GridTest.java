@@ -1,54 +1,24 @@
+import Resources.Converters;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static Resources.TestGrids.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GridTest
 {
 
-	class TestGrid extends Grid<Integer>
+	class BasicGrid extends Grid<Integer>
 	{
-		public TestGrid(Integer[][] testGrid, int blockHeight, int blockWidth)
+		public BasicGrid(List<List<Integer>> testGrid, int blockHeight, int blockWidth)
 		{
 			super(testGrid, blockHeight, blockWidth);
 		}
 	}
-
-	public static Integer[] toArray(Stream<Integer> stream) {
-		return stream.toArray(Integer[]::new);
-	}
-
-	public static Integer[][] to2DArray(Stream<Stream<Integer>> stream) {
-		return stream.map(GridTest::toArray).toArray(Integer[][]::new);
-	}
-
-	final Integer[][] EMPTY_EMPTY = new Integer[][]{};
-
-	final Integer[][] MISMATCHED_ROWS_FIRST_EMPTY = new Integer[][]{{}, {4, 5, 6}, {7, 8, 9}};
-	final Integer[][] MISMATCHED_ROWS_LAST_EMPTY = new Integer[][]{{1, 2, 3}, {4, 5, 6}, {}};
-	final Integer[][] MISMATCHED_ROWS_FIRST_LARGER = new Integer[][]{{1, 2, 3, 4}, {5, 6, 7}, {8, 9, 10}};
-	final Integer[][] MISMATCHED_ROWS_FIRST_SMALLER = new Integer[][]{{1, 2}, {3, 4, 5}, {6, 7, 8}};
-
-	final Integer[][] ONE_BY_EMPTY = new Integer[][]{{}};
-	final Integer[][] ONE_BY_ONE = new Integer[][]{{1}};
-	final Integer[][] ONE_BY_FOUR = new Integer[][]{{1, 2, 3, 4}};
-	final Integer[][] ONE_BY_NINE = new Integer[][]{{1, 2, 3, 4, 5, 6, 7, 8, 9}};
-
-	final Integer[][] TWO_BY_TWO = new Integer[][]{{1, 2}, {3, 4}};
-	final Integer[][] TWO_BY_TWO_INVERSE = new Integer[][]{{1, 3}, {2, 4}};
-	final Integer[][] TWO_BY_FOUR = new Integer[][]{{1, 2, 3, 4}, {5, 6, 7, 8}};
-
-	final Integer[][] THREE_BY_THREE = new Integer[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-	final Integer[][] THREE_BY_THREE_INVERSE = new Integer[][]{{1, 4, 7}, {2, 5, 8}, {3, 6, 9}};
-
-	final Integer[][] FOUR_BY_ONE = new Integer[][]{{1}, {2}, {3}, {4}};
-	final Integer[][] FOUR_BY_TWO = new Integer[][]{{1, 5}, {2, 6}, {3, 7}, {4, 8}};
-
-	final Integer[][] EIGHT_BY_ONE = new Integer[][]{{1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}};
-	final Integer[][] NINE_BY_ONE = new Integer[][]{{1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}};
 
 
 
@@ -56,7 +26,7 @@ public class GridTest
 	void constructorInvalid_2DArray_NULL()
 	{
 		assertThrows(NullPointerException.class,
-					 () -> new TestGrid(null, 0, 0),
+					 () -> new BasicGrid(null, 0, 0),
 					 "Provided a null 2d array to grid constructor.  Expected a NullPointerException");
 	}
 
@@ -64,7 +34,7 @@ public class GridTest
 	@Test
 	void constructorInvalid_GridSize_Zero()
 	{
-		assertThrows(IllegalArgumentException.class, () -> new TestGrid(EMPTY_EMPTY, 1, 1), "Provided a empty grid");
+		assertThrows(IllegalArgumentException.class, () -> new BasicGrid(EMPTY_EMPTY, 1, 1), "Provided a empty grid");
 	}
 
 
@@ -72,7 +42,7 @@ public class GridTest
 	void constructorInvalid_GridSize_OneZero()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(ONE_BY_EMPTY, 1, 1),
+					 () -> new BasicGrid(ONE_BY_EMPTY, 1, 1),
 					 "Provided a grid with one empty row");
 	}
 
@@ -81,7 +51,7 @@ public class GridTest
 	void constructorInvalid_GridSize_EmptyFirstRow()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(MISMATCHED_ROWS_FIRST_EMPTY, 1, 1),
+					 () -> new BasicGrid(MISMATCHED_ROWS_FIRST_EMPTY, 1, 1),
 					 "Provided a grid with rows of different lengths, first row is empty");
 	}
 
@@ -90,7 +60,7 @@ public class GridTest
 	void constructorInvalid_GridSize_EmptyLastRow()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(MISMATCHED_ROWS_LAST_EMPTY, 1, 1),
+					 () -> new BasicGrid(MISMATCHED_ROWS_LAST_EMPTY, 1, 1),
 					 "Provided a grid with rows of different lengths, last row is empty");
 	}
 
@@ -99,7 +69,7 @@ public class GridTest
 	void constructorInvalid_GridSize_MismatchedRow_FirstLarger()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(MISMATCHED_ROWS_FIRST_LARGER, 1, 1),
+					 () -> new BasicGrid(MISMATCHED_ROWS_FIRST_LARGER, 1, 1),
 					 "Provided a grid with rows of different lengths, the first a cell shorter");
 	}
 
@@ -108,7 +78,7 @@ public class GridTest
 	void constructorInvalid_GridSize_MismatchedRow_FirstSmaller()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(MISMATCHED_ROWS_FIRST_SMALLER, 1, 1),
+					 () -> new BasicGrid(MISMATCHED_ROWS_FIRST_SMALLER, 1, 1),
 					 "Provided a grid with rows of different lengths, the first a cell longer");
 	}
 
@@ -117,7 +87,7 @@ public class GridTest
 	void constructorInvalid_BlockSize_ZeroHeight()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(ONE_BY_ONE, 0, 1),
+					 () -> new BasicGrid(ONE_BY_ONE, 0, 1),
 					 "Provided a block size of zero Height");
 	}
 
@@ -126,7 +96,7 @@ public class GridTest
 	void constructorInvalid_BlockSize_NegHeight()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(ONE_BY_ONE, - 1, 1),
+					 () -> new BasicGrid(ONE_BY_ONE, - 1, 1),
 					 "Provided a block size of negative Height (-1)");
 	}
 
@@ -135,7 +105,7 @@ public class GridTest
 	void constructorInvalid_BlockSize_ZeroWidth()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(ONE_BY_ONE, 1, 0),
+					 () -> new BasicGrid(ONE_BY_ONE, 1, 0),
 					 "Provided a block size of zero Width");
 	}
 
@@ -144,7 +114,7 @@ public class GridTest
 	void constructorInvalid_BlockSize_NegWidth()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(ONE_BY_ONE, 1, - 1),
+					 () -> new BasicGrid(ONE_BY_ONE, 1, - 1),
 					 "Provided a block size of negative Width (-1)");
 	}
 
@@ -153,7 +123,7 @@ public class GridTest
 	void constructorInvalid_BlockHeight_TooLarge()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(THREE_BY_THREE, 4, 3),
+					 () -> new BasicGrid(THREE_BY_THREE, 4, 3),
 					 "Provided a block height (4) larger than the height of the supplied grid (3x3)");
 	}
 
@@ -162,7 +132,7 @@ public class GridTest
 	void constructorInvalid_BlockWidth_TooLarge()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(THREE_BY_THREE, 3, 4),
+					 () -> new BasicGrid(THREE_BY_THREE, 3, 4),
 					 "Provided a block width (4) larger than the width of the supplied grid (3x3)");
 	}
 
@@ -171,7 +141,7 @@ public class GridTest
 	void constructorInvalid_BlockWidth_GridNotCleanlyDivisible()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(new Integer[][]{{1, 2, 3}, {1, 2, 3}, {1, 2, 3}}, 2, 2),
+					 () -> new BasicGrid(THREE_BY_THREE, 2, 2),
 					 "Grid width (3) is not cleanly divisible by block width (2)");
 	}
 
@@ -179,19 +149,17 @@ public class GridTest
 	@Test
 	void constructorValid_SizeOne()
 	{
-		Grid<Integer> testGrid = new TestGrid(ONE_BY_ONE, 1, 1);
-		assertArrayEquals(ONE_BY_ONE,
-						  testGrid.as2DArray(),
-						  "Initialising smallest size grid (1x1) with smallest block size (1x1)");
-		assertArrayEquals(ONE_BY_ONE,
-						  GridTest.to2DArray(testGrid.rowStream()),
-						  "Row stream not as expected");
-		assertArrayEquals(ONE_BY_ONE,
-						  GridTest.to2DArray(testGrid.colStream()),
-						  "Column stream not as expected");
-		assertArrayEquals(ONE_BY_ONE,
-						  GridTest.to2DArray(testGrid.blockStream()),
-						  "block stream not as expected");
+		Grid<Integer> testGrid = new BasicGrid(ONE_BY_ONE, 1, 1);
+		assertEquals(ONE_BY_ONE,
+					 testGrid.getGrid(),
+					 "Initialising smallest size grid (1x1) with smallest block size (1x1)");
+		assertEquals(ONE_BY_ONE, Converters.nestedStreamTo2DList(testGrid.rowStream()), "Row stream not as expected");
+		assertEquals(ONE_BY_ONE,
+					 Converters.nestedStreamTo2DList(testGrid.colStream()),
+					 "Column stream not as expected");
+		assertEquals(ONE_BY_ONE,
+					 Converters.nestedStreamTo2DList(testGrid.blockStream()),
+					 "block stream not as expected");
 
 	}
 
@@ -199,17 +167,15 @@ public class GridTest
 	@Test
 	void constructorValid_SizeTwo_BlockOne()
 	{
-		Grid<Integer> testGrid = new TestGrid(TWO_BY_TWO, 1, 1);
-		assertArrayEquals(TWO_BY_TWO, testGrid.as2DArray(), "Initialising grid (2x2) with largest block size (1x1)");
-		assertArrayEquals(TWO_BY_TWO,
-						  GridTest.to2DArray(testGrid.rowStream()),
-						  "Row stream not as expected");
-		assertArrayEquals(TWO_BY_TWO_INVERSE,
-						  GridTest.to2DArray(testGrid.colStream()),
-						  "Column stream not as expected");
-		assertArrayEquals(FOUR_BY_ONE,
-						  GridTest.to2DArray(testGrid.blockStream()),
-						  "block stream not as expected");
+		Grid<Integer> testGrid = new BasicGrid(TWO_BY_TWO, 1, 1);
+		assertEquals(TWO_BY_TWO, testGrid.getGrid(), "Initialising grid (2x2) with largest block size (1x1)");
+		assertEquals(TWO_BY_TWO, Converters.nestedStreamTo2DList(testGrid.rowStream()), "Row stream not as expected");
+		assertEquals(TWO_BY_TWO_INVERSE,
+					 Converters.nestedStreamTo2DList(testGrid.colStream()),
+					 "Column stream not as expected");
+		assertEquals(FOUR_BY_ONE,
+					 Converters.nestedStreamTo2DList(testGrid.blockStream()),
+					 "block stream not as expected");
 
 	}
 
@@ -217,36 +183,32 @@ public class GridTest
 	@Test
 	void constructorValid_SizeTwo_BlockTwo()
 	{
-		Grid<Integer> testGrid = new TestGrid(TWO_BY_TWO, 2, 2);
-		assertArrayEquals(TWO_BY_TWO, testGrid.as2DArray(), "Initialising grid (2x2) with largest block size (2x2)");
-		assertArrayEquals(TWO_BY_TWO,
-						  GridTest.to2DArray(testGrid.rowStream()),
-						  "Row stream not as expected");
-		assertArrayEquals(TWO_BY_TWO_INVERSE,
-						  GridTest.to2DArray(testGrid.colStream()),
-						  "Column stream not as expected");
-		assertArrayEquals(ONE_BY_FOUR,
-						  GridTest.to2DArray(testGrid.blockStream()),
-						  "block stream not as expected");
+		Grid<Integer> testGrid = new BasicGrid(TWO_BY_TWO, 2, 2);
+		assertEquals(TWO_BY_TWO, testGrid.getGrid(), "Initialising grid (2x2) with largest block size (2x2)");
+		assertEquals(TWO_BY_TWO, Converters.nestedStreamTo2DList(testGrid.rowStream()), "Row stream not as expected");
+		assertEquals(TWO_BY_TWO_INVERSE,
+					 Converters.nestedStreamTo2DList(testGrid.colStream()),
+					 "Column stream not as expected");
+		assertEquals(ONE_BY_FOUR,
+					 Converters.nestedStreamTo2DList(testGrid.blockStream()),
+					 "block stream not as expected");
 	}
 
 
 	@Test
 	void constructorValid_SizeThree_BlockOne()
 	{
-		Grid<Integer> testGrid = new TestGrid(THREE_BY_THREE, 1, 1);
-		assertArrayEquals(THREE_BY_THREE,
-						  testGrid.as2DArray(),
-						  "Initialising grid (3x3) with smallest block size (1x1)");
-		assertArrayEquals(THREE_BY_THREE,
-						  GridTest.to2DArray(testGrid.rowStream()),
-						  "Row stream not as expected");
-		assertArrayEquals(THREE_BY_THREE_INVERSE,
-						  GridTest.to2DArray(testGrid.colStream()),
-						  "Column stream not as expected");
-		assertArrayEquals(Arrays.stream(NINE_BY_ONE).toArray(),
-						  GridTest.to2DArray(testGrid.blockStream()),
-						  "block stream not as expected");
+		Grid<Integer> testGrid = new BasicGrid(THREE_BY_THREE, 1, 1);
+		assertEquals(THREE_BY_THREE, testGrid.getGrid(), "Initialising grid (3x3) with smallest block size (1x1)");
+		assertEquals(THREE_BY_THREE,
+					 Converters.nestedStreamTo2DList(testGrid.rowStream()),
+					 "Row stream not as expected");
+		assertEquals(THREE_BY_THREE_INVERSE,
+					 Converters.nestedStreamTo2DList(testGrid.colStream()),
+					 "Column stream not as expected");
+		assertEquals(NINE_BY_ONE,
+					 Converters.nestedStreamTo2DList(testGrid.blockStream()),
+					 "block stream not as expected");
 
 	}
 
@@ -255,7 +217,7 @@ public class GridTest
 	void constructorInvalid_SizeThree_BlockTwo()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(new Integer[][]{{1, 2, 3}, {1, 2, 3}, {1, 2, 3}}, 2, 2),
+					 () -> new BasicGrid(THREE_BY_THREE, 2, 2),
 					 "Grid width (3) is not cleanly divisible by block width (2)");
 	}
 
@@ -263,76 +225,68 @@ public class GridTest
 	@Test
 	void constructorValid_SizeThree_BlockThree()
 	{
-		Grid<Integer> testGrid = new TestGrid(THREE_BY_THREE, 3, 3);
-		assertArrayEquals(THREE_BY_THREE,
-						  testGrid.as2DArray(),
-						  "Initialising grid (3x3) with largest block size (3x3)");
-		assertArrayEquals(Arrays.stream(THREE_BY_THREE).toArray(),
-						  GridTest.to2DArray(testGrid.rowStream()),
-						  "Row stream not as expected");
-		assertArrayEquals(Arrays.stream(THREE_BY_THREE_INVERSE).toArray(),
-						  GridTest.to2DArray(testGrid.colStream()),
-						  "Column stream not as expected");
-		assertArrayEquals(Arrays.stream(ONE_BY_NINE).toArray(),
-						  GridTest.to2DArray(testGrid.blockStream()),
-						  "block stream not as expected");
+		Grid<Integer> testGrid = new BasicGrid(THREE_BY_THREE, 3, 3);
+		assertEquals(THREE_BY_THREE, testGrid.getGrid(), "Initialising grid (3x3) with largest block size (3x3)");
+		assertEquals(THREE_BY_THREE,
+					 Converters.nestedStreamTo2DList(testGrid.rowStream()),
+					 "Row stream not as expected");
+		assertEquals(THREE_BY_THREE_INVERSE,
+					 Converters.nestedStreamTo2DList(testGrid.colStream()),
+					 "Column stream not as expected");
+		assertEquals(ONE_BY_NINE,
+					 Converters.nestedStreamTo2DList(testGrid.blockStream()),
+					 "block stream not as expected");
 	}
 
 
 	@Test
 	void constructorValid_OneByFour_BlockHeight4()
 	{
-		Grid<Integer> testGrid = new TestGrid(ONE_BY_FOUR, 1, 4);
-		assertArrayEquals(ONE_BY_FOUR,
-						  testGrid.as2DArray(),
-						  "Initialising rectangular grid (1 row 4 cols) with largest block size (1 row 4 cols)");
-		assertArrayEquals(Arrays.stream(ONE_BY_FOUR).toArray(),
-						  GridTest.to2DArray(testGrid.rowStream()),
-						  "Row stream not as expected");
-		assertArrayEquals(Arrays.stream(FOUR_BY_ONE).toArray(),
-						  GridTest.to2DArray(testGrid.colStream()),
-						  "Column stream not as expected");
-		assertArrayEquals(Arrays.stream(ONE_BY_FOUR).toArray(),
-						  GridTest.to2DArray(testGrid.blockStream()),
-						  "block stream not as expected");
+		Grid<Integer> testGrid = new BasicGrid(ONE_BY_FOUR, 1, 4);
+		assertEquals(ONE_BY_FOUR,
+					 testGrid.getGrid(),
+					 "Initialising rectangular grid (1 row 4 cols) with largest block size (1 row 4 cols)");
+		assertEquals(ONE_BY_FOUR, Converters.nestedStreamTo2DList(testGrid.rowStream()), "Row stream not as expected");
+		assertEquals(FOUR_BY_ONE,
+					 Converters.nestedStreamTo2DList(testGrid.colStream()),
+					 "Column stream not as expected");
+		assertEquals(ONE_BY_FOUR,
+					 Converters.nestedStreamTo2DList(testGrid.blockStream()),
+					 "block stream not as expected");
 	}
 
 
 	@Test
 	void constructorValid_TwoByFour_BlockWidth1Height1()
 	{
-		Grid<Integer> testGrid = new TestGrid(TWO_BY_FOUR, 1, 1);
-		assertArrayEquals(TWO_BY_FOUR,
-						  testGrid.as2DArray(),
-						  "Initialising rectangular grid (2 row 4 cols) with block size (1 row 1 cols)");
-		assertArrayEquals(Arrays.stream(TWO_BY_FOUR).toArray(),
-						  GridTest.to2DArray(testGrid.rowStream()),
-						  "Row stream not as expected");
-		assertArrayEquals(Arrays.stream(FOUR_BY_TWO).toArray(),
-						  GridTest.to2DArray(testGrid.colStream()),
-						  "Column stream not as expected");
-		assertArrayEquals(Arrays.stream(EIGHT_BY_ONE).toArray(),
-						  GridTest.to2DArray(testGrid.blockStream()),
-						  "block stream not as expected");
+		Grid<Integer> testGrid = new BasicGrid(TWO_BY_FOUR, 1, 1);
+		assertEquals(TWO_BY_FOUR,
+					 testGrid.getGrid(),
+					 "Initialising rectangular grid (2 row 4 cols) with block size (1 row 1 cols)");
+		assertEquals(TWO_BY_FOUR, Converters.nestedStreamTo2DList(testGrid.rowStream()), "Row stream not as expected");
+		assertEquals(FOUR_BY_TWO,
+					 Converters.nestedStreamTo2DList(testGrid.colStream()),
+					 "Column stream not as expected");
+		assertEquals(EIGHT_BY_ONE,
+					 Converters.nestedStreamTo2DList(testGrid.blockStream()),
+					 "block stream not as expected");
 	}
 
 
 	@Test
 	void constructorValid_TwoByFour_BlockWidth2Height2()
 	{
-		Grid<Integer> testGrid = new TestGrid(TWO_BY_FOUR, 2, 2);
-		assertArrayEquals(TWO_BY_FOUR,
-						  testGrid.as2DArray(),
-						  "Initialising rectangular grid (2 row 4 cols) with block size (2 row 2 cols)");
-		assertArrayEquals(TWO_BY_FOUR,
-						  GridTest.to2DArray(testGrid.rowStream()),
-						  "Row stream not as expected");
-		assertArrayEquals(FOUR_BY_TWO,
-						  GridTest.to2DArray(testGrid.colStream()),
-						  "Column stream not as expected");
-		assertArrayEquals(new Integer[][]{{1, 2, 5, 6}, {3, 4, 7, 8}},
-						  GridTest.to2DArray(testGrid.blockStream()),
-						  "block stream not as expected");
+		Grid<Integer> testGrid = new BasicGrid(TWO_BY_FOUR, 2, 2);
+		assertEquals(TWO_BY_FOUR,
+					 testGrid.getGrid(),
+					 "Initialising rectangular grid (2 row 4 cols) with block size (2 row 2 cols)");
+		assertEquals(TWO_BY_FOUR, Converters.nestedStreamTo2DList(testGrid.rowStream()), "Row stream not as expected");
+		assertEquals(FOUR_BY_TWO,
+					 Converters.nestedStreamTo2DList(testGrid.colStream()),
+					 "Column stream not as expected");
+		assertEquals(Converters.arrayTo2DList(new Integer[][]{{1, 2, 5, 6}, {3, 4, 7, 8}}),
+					 Converters.nestedStreamTo2DList(testGrid.blockStream()),
+					 "block stream not as expected");
 	}
 
 
@@ -340,7 +294,7 @@ public class GridTest
 	void constructorInvalid_TwoByFour_BlockWidth2Height3()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(TWO_BY_FOUR, 3, 2),
+					 () -> new BasicGrid(TWO_BY_FOUR, 3, 2),
 					 "Grid height (4) is not cleanly divisible by block height (3)");
 	}
 
@@ -348,50 +302,50 @@ public class GridTest
 	@Test
 	void constructorValid_TwoByFour_BlockWidth1Height4()
 	{
-		Grid<Integer> testGrid = new TestGrid(TWO_BY_FOUR, 1, 4);
-		assertArrayEquals(TWO_BY_FOUR,
-						  testGrid.as2DArray(),
-						  "Initialising rectangular grid (2 row 4 cols) with largest block size (1 row 4 cols)");
+		Grid<Integer> testGrid = new BasicGrid(TWO_BY_FOUR, 1, 4);
+		assertEquals(TWO_BY_FOUR,
+					 testGrid.getGrid(),
+					 "Initialising rectangular grid (2 row 4 cols) with largest block size (1 row 4 cols)");
 	}
 
 
 	@Test
 	void constructorValid_TwoByFour_BlockWidth2Height4()
 	{
-		Grid<Integer> testGrid = new TestGrid(TWO_BY_FOUR, 2, 4);
-		assertArrayEquals(TWO_BY_FOUR,
-						  testGrid.as2DArray(),
-						  "Initialising rectangular grid (2 row 4 cols) with largest block size (2 row 4 cols)");
+		Grid<Integer> testGrid = new BasicGrid(TWO_BY_FOUR, 2, 4);
+		assertEquals(TWO_BY_FOUR,
+					 testGrid.getGrid(),
+					 "Initialising rectangular grid (2 row 4 cols) with largest block size (2 row 4 cols)");
 	}
 
 
 	@Test
 	void constructorValid_FourByOne_BlockHeight4()
 	{
-		Grid<Integer> testGrid = new TestGrid(FOUR_BY_ONE, 4, 1);
-		assertArrayEquals(FOUR_BY_ONE,
-						  testGrid.as2DArray(),
-						  "Initialising rectangular grid (4 row 1 cols) with largest block size (4 row 1 cols)");
+		Grid<Integer> testGrid = new BasicGrid(FOUR_BY_ONE, 4, 1);
+		assertEquals(FOUR_BY_ONE,
+					 testGrid.getGrid(),
+					 "Initialising rectangular grid (4 row 1 cols) with largest block size (4 row 1 cols)");
 	}
 
 
 	@Test
 	void constructorValid_FourByTwo_BlockWidth1Height1()
 	{
-		Grid<Integer> testGrid = new TestGrid(FOUR_BY_TWO, 1, 1);
-		assertArrayEquals(FOUR_BY_TWO,
-						  testGrid.as2DArray(),
-						  "Initialising rectangular grid (4 row 2 cols) with block size (1 row 1 cols)");
+		Grid<Integer> testGrid = new BasicGrid(FOUR_BY_TWO, 1, 1);
+		assertEquals(FOUR_BY_TWO,
+					 testGrid.getGrid(),
+					 "Initialising rectangular grid (4 row 2 cols) with block size (1 row 1 cols)");
 	}
 
 
 	@Test
 	void constructorValid_FourByTwo_BlockWidth2Height2()
 	{
-		Grid<Integer> testGrid = new TestGrid(FOUR_BY_TWO, 2, 2);
-		assertArrayEquals(FOUR_BY_TWO,
-						  testGrid.as2DArray(),
-						  "Initialising rectangular grid (4 row 2 cols) with block size (2 row 2 cols)");
+		Grid<Integer> testGrid = new BasicGrid(FOUR_BY_TWO, 2, 2);
+		assertEquals(FOUR_BY_TWO,
+					 testGrid.getGrid(),
+					 "Initialising rectangular grid (4 row 2 cols) with block size (2 row 2 cols)");
 	}
 
 
@@ -399,7 +353,7 @@ public class GridTest
 	void constructorInvalid_FourByTwo_BlockWidth3Height2()
 	{
 		assertThrows(IllegalArgumentException.class,
-					 () -> new TestGrid(FOUR_BY_TWO, 2, 3),
+					 () -> new BasicGrid(FOUR_BY_TWO, 2, 3),
 					 "Grid width (4) is not cleanly divisible by block width (3)");
 	}
 
@@ -407,19 +361,19 @@ public class GridTest
 	@Test
 	void constructorValid_FourByTwo_BlockWidth1Height4()
 	{
-		Grid<Integer> testGrid = new TestGrid(FOUR_BY_TWO, 4, 1);
-		assertArrayEquals(FOUR_BY_TWO,
-						  testGrid.as2DArray(),
-						  "Initialising rectangular grid (4 row 2 cols) with largest block size (4 rows 1 col)");
+		Grid<Integer> testGrid = new BasicGrid(FOUR_BY_TWO, 4, 1);
+		assertEquals(FOUR_BY_TWO,
+					 testGrid.getGrid(),
+					 "Initialising rectangular grid (4 row 2 cols) with largest block size (4 rows 1 col)");
 	}
 
 
 	@Test
 	void constructorValid_FourByTwo_BlockWidth4Height2()
 	{
-		Grid<Integer> testGrid = new TestGrid(FOUR_BY_TWO, 4, 2);
-		assertArrayEquals(FOUR_BY_TWO,
-						  testGrid.as2DArray(),
-						  "Initialising rectangular grid (4 row 2 cols) with largest block size (4 rows 2 cols)");
+		Grid<Integer> testGrid = new BasicGrid(FOUR_BY_TWO, 4, 2);
+		assertEquals(FOUR_BY_TWO,
+					 testGrid.getGrid(),
+					 "Initialising rectangular grid (4 row 2 cols) with largest block size (4 rows 2 cols)");
 	}
 }

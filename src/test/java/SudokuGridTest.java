@@ -14,7 +14,7 @@ class SudokuGridTest
 	@Test
 	void constructorNULL()
 	{
-		assertThrows(NullPointerException.class, () -> new SudokuGrid((Integer[][]) null));
+		assertThrows(NullPointerException.class, () -> new SudokuGrid(null));
 	}
 
 
@@ -119,7 +119,7 @@ class SudokuGridTest
 				Arrays.stream(new int[]{4, 5, 6, 7, 8, 9, 1, 2, 3}),
 				Arrays.stream(new int[]{7, 8, 9, 1, 2, 3, 4, 5, 6})
 		};
-		Grid testGrid = new SudokuGrid(SudokuTestGrids.INVALID_ROWS);
+		Grid<Integer> testGrid = new SudokuGrid(SudokuTestGrids.INVALID_ROWS);
 		IntStream.range(0, 9)
 				.forEach(col -> assertArrayEquals(testStream[col].boxed().toArray(),
 												  testGrid.getColAsStream(col).toArray(),
@@ -131,7 +131,7 @@ class SudokuGridTest
 	@Test
 	void blockAsStream()
 	{
-		Grid testGrid = new SudokuGrid(SudokuTestGrids.INVALID_BLOCKS_MINIMAL);
+		Grid<Integer> testGrid = new SudokuGrid(SudokuTestGrids.INVALID_BLOCKS_MINIMAL);
 		assertArrayEquals(new Integer[]{2, 4, 1, 7, 3, 5, 8, 6, 9}, testGrid.getBlockAsStream(0, 0).toArray());
 		assertArrayEquals(new Integer[]{6, 9, 5, 4, 2, 8, 7, 3, 1}, testGrid.getBlockAsStream(0, 3).toArray());
 		assertArrayEquals(new Integer[]{3, 8, 7, 1, 6, 9, 4, 2, 5}, testGrid.getBlockAsStream(0, 6).toArray());

@@ -22,20 +22,20 @@ public class SudokuGrid extends Grid<Integer>
 
 	public SudokuGrid(List<List<Integer>> listOfIntegerList)
 	{
-		super(SudokuGrid.convertList(listOfIntegerList), SudokuGrid.BLOCK_SIZE, SudokuGrid.BLOCK_SIZE);
+		super(listOfIntegerList, SudokuGrid.BLOCK_SIZE, SudokuGrid.BLOCK_SIZE);
 	}
 
-	public SudokuGrid(Integer[][] integerArray)
-	{
-		super(integerArray, SudokuGrid.BLOCK_SIZE, SudokuGrid.BLOCK_SIZE);
-	}
-
-
-
-	public SudokuGrid(int[][] arrayData)
-	{
-		this(SudokuGrid.convertPrimitiveGrid(arrayData));
-	}
+//	public SudokuGrid(Integer[][] integerArray)
+//	{
+//		super(Grid.convert2DArrayTo2DList(integerArray), SudokuGrid.BLOCK_SIZE, SudokuGrid.BLOCK_SIZE);
+//	}
+//
+//
+//
+//	public SudokuGrid(int[][] arrayData)
+//	{
+//		this(SudokuGrid.convertPrimitiveGrid(arrayData));
+//	}
 
 
 
