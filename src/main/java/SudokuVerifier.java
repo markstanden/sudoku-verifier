@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 public class SudokuVerifier {
     public static final Set<Integer> VALID_NUMBERS = arrayToSet(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9});
 
-    private final Grid grid;
+    private final Grid<Integer> grid;
 
     /**
      * Private constructor to force use of
@@ -15,7 +15,7 @@ public class SudokuVerifier {
      *
      * @param solution The solution to verify
      */
-    private SudokuVerifier(final Grid solution) {
+    private SudokuVerifier(final Grid<Integer> solution) {
         this.grid = solution;
     }
 
@@ -25,9 +25,9 @@ public class SudokuVerifier {
      * @param grid The sudoku grid to be verified
      * @return true if the grid is valid, false if invalid
      */
-    public static boolean verify(Grid grid) {
+    public static boolean verify(Grid<Integer> grid) {
         SudokuVerifier verifier = new SudokuVerifier(grid);
-        return verifier.gridIsValid();
+        return verifier.isValid();
     }
 
     /**
@@ -51,7 +51,7 @@ public class SudokuVerifier {
      * Solution is Invalid
      */
     public void verifySolution() {
-        System.out.println("Solution is ".concat(gridIsValid() ? "Valid" : "Invalid"));
+        System.out.println("Solution is ".concat(isValid() ? "Valid" : "Invalid"));
     }
 
     /**
@@ -60,7 +60,7 @@ public class SudokuVerifier {
      *
      * @return returns true if the supplied grid is valid, false if invalid
      */
-    private boolean gridIsValid() {
+    private boolean isValid() {
         return Stream.of(grid.rowStream(), grid.colStream(), grid.blockStream())
                 .flatMap(x -> x)
                 .parallel()
@@ -104,33 +104,25 @@ public class SudokuVerifier {
      *
      * @return true if all blocks are valid.
      */
-    private boolean groupStreamIsValid(Stream<IntStream> groupStream) {
+    private boolean groupStreamIsValid(Stream<Stream<Integer>> groupStream) {
         return groupStream
                 .parallel()
                 .allMatch(this::checkAGroup);
     }
 
 
-    /**
-     * Converts an IntStream into an unordered set for comparison
-     *
-     * @param intStream The IntStream to collect the values from
-     * @return An unordered set of the values from the stream.
-     */
-    private Set<Integer> intStreamToSet(IntStream intStream) {
-        return intStream.parallel()
-                .boxed()
-                .collect(Collectors.toSet());
-    }
 
     /**
      * Checks individual group stream (row, column, block) for validity.
      *
-     * @param group the IntStream of the row to be tested
+     * @param group the Stream of boxed Integer values of the row to be tested
      * @return true if valid, false if invalid.
      */
-    private boolean checkAGroup(final IntStream group) {
-        return intStreamToSet(group).containsAll(VALID_NUMBERS);
+    private boolean checkAGroup(final Stream<Integer> group) {
+        return group
+                .parallel()
+                .collect(Collectors.toSet())
+                .containsAll(VALID_NUMBERS);
     }
 
 }
