@@ -1,3 +1,6 @@
+package WebView;
+
+import Sudoku.SudokuVerifier;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -5,10 +8,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SudokuHandler implements HttpHandler
 {
@@ -32,9 +31,9 @@ public class SudokuHandler implements HttpHandler
 				String grid = Files.readString(Path.of("src/assets/html/grid.html"));
 				String footer = Files.readString(Path.of("src/assets/html/footer.html"));
 
-				String style = wrap(css, "style");
-				String body = wrap(title.concat(grid), "body");
-				response = buildHtml(header,style, body, footer);
+				String style = HtmlGenerator.wrap("style", css);
+				String body = HtmlGenerator.wrap("body", title.concat(grid));
+				response = HtmlGenerator.buildHtml(header, style, body, footer);
 			}
 			catch(FileNotFoundException e) {
 				System.out.println("An error occurred attempting to read the html file.");
@@ -50,7 +49,7 @@ public class SudokuHandler implements HttpHandler
 					.findFirst()
 					.orElse("");
 
-			boolean isValid = SudokuVerifier.verify(SudokuGrid.fromFormData(formData));
+			boolean isValid = SudokuVerifier.verify(FormProcessor.fromFormData(formData));
 			response = "<h1>Grid is " + (isValid ? "Valid" : "Invalid") + "</h1>";
 		}
 
@@ -62,17 +61,4 @@ public class SudokuHandler implements HttpHandler
 	}
 
 
-	private String wrap(String html, String tag)
-	{
-		return String.format("%n%n<%s>%n%s%n</%s>%n", tag, html.indent(4), tag);
-	}
-
-	private String buildHtml(String... components)
-	{
-		String docType = "<!DOCTYPE html>";
-		String openingTag = "<html lang=\"en\">";
-		String closingTag = "</html>";
-		String[] result = new String[]{docType, openingTag, String.join("\n", components), closingTag};
-		return String.join("\n", result);
-	}
 }

@@ -1,5 +1,9 @@
+package Sudoku;
+
 import BaseTests.ConsoleTest;
 import Resources.SudokuTestGrids;
+import Sudoku.SudokuGrid;
+import Sudoku.SudokuVerifier;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

@@ -1,3 +1,5 @@
+package Grid;
+
 import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -110,9 +112,9 @@ public abstract class Grid<T>
 	/**
 	 * Produces an ordered stream to represent the row.
 	 *
-	 * @return An IntStream of sequential cell values
+	 * @return A Stream of sequential cell values
 	 * 		representing the row
-	 * 		The IntStream progresses left to right.
+	 * 		The Stream progresses left to right.
 	 */
 	public Stream<T> getRowAsStream(int rowNumber)
 	{
@@ -123,7 +125,7 @@ public abstract class Grid<T>
 	/**
 	 * Produces a stream of row streams to represent the grid.
 	 *
-	 * @return A Stream of sequential IntStreams
+	 * @return A Stream of sequential Streams
 	 * 		representing the grid.
 	 * 		Streams progress from top row to bottom row,
 	 * 		with each row progressing left to right.
@@ -147,9 +149,9 @@ public abstract class Grid<T>
 	/**
 	 * Produces a stream to represent the column.
 	 *
-	 * @return An IntStream of sequential cell values
+	 * @return A Stream of sequential cell values
 	 * 		representing the column
-	 * 		The IntStream progresses top to bottom.
+	 * 		The Stream progresses top to bottom.
 	 */
 	public Stream<T> getColAsStream(int column)
 	{
@@ -161,9 +163,9 @@ public abstract class Grid<T>
 
 	/**
 	 * Produces an ordered stream of column streams to represent the grid.
-	 * Each column is an IntStream (essentially a Stream&lt;int&gt;)
+	 * Each column is a Stream&lt;T&gt;
 	 *
-	 * @return A Stream of sequential IntStreams
+	 * @return A Stream of sequential Streams
 	 * 		representing the grid.
 	 * 		Streams progress from left column to right column,
 	 * 		with each column starting at the top.
@@ -187,9 +189,9 @@ public abstract class Grid<T>
 	/**
 	 * Produces a stream to represent the Block.
 	 *
-	 * @return An IntStream of sequential cell values
+	 * @return A Stream of sequential cell values
 	 * 		representing the column
-	 * 		The IntStream progresses left to right, top to bottom.
+	 * 		The Stream progresses left to right, top to bottom.
 	 * 		<p>
 	 * 		<pre>
 	 * 												1st row, cells 1 to 3    ===>    A  B  C     <br/>
@@ -209,7 +211,7 @@ public abstract class Grid<T>
 	/**
 	 * Produces a stream of block streams to represent the grid.
 	 *
-	 * @return A Stream of sequential IntStreams
+	 * @return A Stream of sequential Streams
 	 * 		representing each block on the grid.
 	 * 		Streams progress left to right, top to bottom.
 	 * 		<p>

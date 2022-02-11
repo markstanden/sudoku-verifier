@@ -1,3 +1,6 @@
+package Grid;
+
+import Grid.Grid;
 import Resources.Converters;
 import org.junit.jupiter.api.Test;
 
@@ -140,7 +143,7 @@ public class GridTest
 	{
 		assertThrows(IllegalArgumentException.class,
 					 () -> new BasicGrid(THREE_BY_THREE, 2, 2),
-					 "Grid width (3) is not cleanly divisible by block width (2)");
+					 "Grid.Grid width (3) is not cleanly divisible by block width (2)");
 	}
 
 
@@ -216,7 +219,7 @@ public class GridTest
 	{
 		assertThrows(IllegalArgumentException.class,
 					 () -> new BasicGrid(THREE_BY_THREE, 2, 2),
-					 "Grid width (3) is not cleanly divisible by block width (2)");
+					 "Grid.Grid width (3) is not cleanly divisible by block width (2)");
 	}
 
 
@@ -293,7 +296,7 @@ public class GridTest
 	{
 		assertThrows(IllegalArgumentException.class,
 					 () -> new BasicGrid(TWO_BY_FOUR, 3, 2),
-					 "Grid height (4) is not cleanly divisible by block height (3)");
+					 "Grid.Grid height (4) is not cleanly divisible by block height (3)");
 	}
 
 
@@ -352,7 +355,7 @@ public class GridTest
 	{
 		assertThrows(IllegalArgumentException.class,
 					 () -> new BasicGrid(FOUR_BY_TWO, 2, 3),
-					 "Grid width (4) is not cleanly divisible by block width (3)");
+					 "Grid.Grid width (4) is not cleanly divisible by block width (3)");
 	}
 
 

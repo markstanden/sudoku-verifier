@@ -1,4 +1,9 @@
+package Sudoku;
+
+import Grid.Grid;
+
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,6 +41,19 @@ public class SudokuVerifier
 	{
 		SudokuVerifier verifier = new SudokuVerifier(grid);
 		return verifier.isValid();
+	}
+
+	/**
+	 * Static builder to reduce boilerplate when verifying a grid
+	 *
+	 * @param grid
+	 * 		The sudoku grid to be verified in the form of nested List&lt;Integer&gt;
+	 *
+	 * @return true if the grid is valid, false if invalid
+	 */
+	public static boolean verify(List<List<Integer>> grid)
+	{
+		return verify(new SudokuGrid(grid));
 	}
 
 
