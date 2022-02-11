@@ -24,7 +24,7 @@ class HtmlGeneratorTest
 					+ "    </div>\n"
 					+ "    <button class=\"verify\">Verify</button>\n"
 					+ "    <button class=\"reset\">Reset</button>\n"
-					+ "</form>";
+					+ "</form>\n";
 
 	final String TEST_HTML_FORM_THREE_BY_THREE =
 			"<form id=\"grid-form\" method=\"post\" action=\"\">\n"
@@ -47,7 +47,7 @@ class HtmlGeneratorTest
 					+ "    </div>\n"
 					+ "    <button class=\"verify\">Verify</button>\n"
 					+ "    <button class=\"reset\">Reset</button>\n"
-					+ "</form>";
+					+ "</form>\n";
 
 
 	@Test
