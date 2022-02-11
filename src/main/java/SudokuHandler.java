@@ -22,7 +22,14 @@ public class SudokuHandler implements HttpHandler
 		String response = "";
 		if(exchange.getRequestMethod().equals("GET")) {
 			try {
-				response = Files.readString(Path.of("src/valid.html"));
+				String header = Files.readString(Path.of("src/assets/html/header.html"));
+				String title = Files.readString(Path.of("src/assets/html/title.html"));
+				String grid = Files.readString(Path.of("src/assets/html/grid.html"));
+				String footer = Files.readString(Path.of("src/assets/html/footer.html"));
+				response = header
+						.concat(title)
+						.concat(grid)
+						.concat(footer);
 			}
 			catch(FileNotFoundException e) {
 				System.out.println("An error occurred attempting to read the html file.");

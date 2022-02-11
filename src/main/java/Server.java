@@ -13,7 +13,7 @@ public class Server {
      */
     private Server(int port) throws java.io.IOException {
         server = HttpServer.create(new InetSocketAddress(port), 0);
-        this.port = port;
+        this.port = server.getAddress().getPort();
     }
 
     public static Server start(final int port) {
@@ -28,7 +28,6 @@ public class Server {
         sudoku.server.start();
         return sudoku;
     }
-
 
     public int getPort() {
         return port;
