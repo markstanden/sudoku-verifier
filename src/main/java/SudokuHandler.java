@@ -23,11 +23,13 @@ public class SudokuHandler implements HttpHandler
 		if(exchange.getRequestMethod().equals("GET")) {
 			try {
 				String header = Files.readString(Path.of("src/assets/html/header.html"));
+				String css = Files.readString(Path.of("src/assets/html/styles.css"));
 				String title = Files.readString(Path.of("src/assets/html/title.html"));
 				String grid = Files.readString(Path.of("src/assets/html/grid.html"));
 				String footer = Files.readString(Path.of("src/assets/html/footer.html"));
 				response = header
 						.concat(title)
+						.concat(wrap(css, "style"))
 						.concat(grid)
 						.concat(footer);
 			}
@@ -54,5 +56,9 @@ public class SudokuHandler implements HttpHandler
 		OutputStream responseBody = exchange.getResponseBody();
 		responseBody.write(response.getBytes());
 		responseBody.close();
+	}
+
+	private String wrap(String html, String tag) {
+		return String.format("<%s>%n    %s%n</%s>",tag, html, tag);
 	}
 }
