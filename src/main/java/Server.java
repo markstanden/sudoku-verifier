@@ -16,16 +16,15 @@ public class Server {
         this.port = port;
     }
 
-    public static Server start() {
+    public static Server start(final int port) {
         Server sudoku;
         try {
-            sudoku = new Server(5000);
+            sudoku = new Server(port);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return null;
         }
-        sudoku.server.createContext("/", new DisplayHandler());
-        sudoku.server.createContext("/verify", new VerifyHandler());
+        sudoku.server.createContext("/", new SudokuHandler());
         sudoku.server.start();
         return sudoku;
     }
