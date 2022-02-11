@@ -5,6 +5,8 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SudokuHandler implements HttpHandler
 {
@@ -27,11 +29,16 @@ public class SudokuHandler implements HttpHandler
 				String title = Files.readString(Path.of("src/assets/html/title.html"));
 				String grid = Files.readString(Path.of("src/assets/html/grid.html"));
 				String footer = Files.readString(Path.of("src/assets/html/footer.html"));
-				response = header
-						.concat(title)
-						.concat(wrap(css, "style"))
-						.concat(grid)
-						.concat(footer);
+
+				String style = wrap(css, "style");
+				String body = wrap(title.concat(grid), "body");
+				response = ("<!DOCTYPE html>\n" +
+						"<html lang=\"en\">\n")
+						.concat(header)
+						.concat(style)
+						.concat(body)
+						.concat(footer)
+						.concat("<\\html>");
 			}
 			catch(FileNotFoundException e) {
 				System.out.println("An error occurred attempting to read the html file.");
@@ -58,7 +65,9 @@ public class SudokuHandler implements HttpHandler
 		responseBody.close();
 	}
 
-	private String wrap(String html, String tag) {
-		return String.format("<%s>%n    %s%n</%s>",tag, html, tag);
+
+	private String wrap(String html, String tag)
+	{
+		return String.format("%n%n<%s>%n%s%n</%s>%n", tag, html.indent(4), tag);
 	}
 }
