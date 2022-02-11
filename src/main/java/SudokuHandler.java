@@ -20,7 +20,7 @@ public class SudokuHandler implements HttpHandler
 	public void handle(HttpExchange exchange) throws IOException
 	{
 		String response = "";
-		if(exchange.getRequestMethod().equals("POST")) {
+		if(exchange.getRequestMethod().equals("GET")) {
 			try {
 				response = Files.readString(Path.of("src/valid.html"));
 			}
