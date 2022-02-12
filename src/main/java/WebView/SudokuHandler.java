@@ -4,13 +4,17 @@ import Sudoku.SudokuVerifier;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.List;
 
 public class SudokuHandler implements HttpHandler
 {
+	final List<List<Integer>> BASE_GRID = FormProcessor.validateNumstringToList(
+			"085601023462308150003005068578030649620984735349567812050803206836000504290756380");
 
 	/**
 	 * HttpHandler requires a handle function that takes a request.
@@ -23,35 +27,45 @@ public class SudokuHandler implements HttpHandler
 	public void handle(HttpExchange exchange) throws IOException
 	{
 		String response = "";
-		if(exchange.getRequestMethod().equals("GET")) {
+		if(exchange.getRequestMethod()
+				   .equals("GET")) {
+			String unsanitisedQuery = exchange.getRequestURI()
+											  .getQuery();
+			//Sanitise string
 			try {
-				String header = Files.readString(Path.of("src/assets/html/header.html"));
-				String css = Files.readString(Path.of("src/assets/html/styles.css"));
-				String title = Files.readString(Path.of("src/assets/html/title.html"));
-				String footer = Files.readString(Path.of("src/assets/html/footer.html"));
+				List<List<Integer>> cleanQuery = FormProcessor.validateFormDataToList(unsanitisedQuery);
+				response = PageBuilder.build(cleanQuery,
+											 "<p class=\"blurb\">Enter your grid here, for instant " + "verification.  I hope you win!</p>");
+			}
+			catch(IllegalArgumentException e) {
+				response = PageBuilder.build(BASE_GRID,
+											 "<p class=\"blurb\">Enter your grid here, for instant " + "verification.  I hope you win!</p>");
+			}
 
-				String style = HtmlGenerator.nest("style", css);
-				String body = HtmlGenerator.nest("body",
-												 title.concat("\n").concat(HtmlGenerator.createGrid(FormProcessor.listFromNumString(
-														 "123456789" + "456789123" + "789123456" + "234567891" + "567891234" + "891234567" + "345678912" + "678912345" + "912345678"))));
-				response = HtmlGenerator.buildHtml(header, style, body, footer);
-			}
-			catch(FileNotFoundException e) {
-				System.out.println("An error occurred attempting to read the html file.");
-				throw e;
-			}
 		}
 
-		String formData = "";
-		if(exchange.getRequestMethod().equals("POST")) {
+
+		if(exchange.getRequestMethod()
+				   .equals("POST")) {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody()));
-			formData = reader.lines().filter(line -> line.startsWith("R0-C0")).findFirst().orElse("");
+			String unsanitisedRequest = reader.lines()
+											  .filter(line -> line.startsWith("R0-C0"))
+											  .findFirst()
+											  .orElse("");
 
-			boolean isValid = SudokuVerifier.verify(FormProcessor.fromFormData(formData));
-			response = "<h1>Grid is " + (isValid ? "Valid" : "Invalid") + "</h1>";
+			List<List<Integer>> sanitisedGrid = FormProcessor.validateFormDataToList(unsanitisedRequest);
+			boolean isValid = SudokuVerifier.verify(sanitisedGrid);
+			response = PageBuilder.build(sanitisedGrid,
+										 HtmlGenerator.nest("p class=\"blurb\"",
+															String.format("The grid is %s",
+																		  isValid
+																		  ? "correct! Well " + "Done"
+																		  : "not quite right, try again."),
+															"p"));
 		}
 
-		exchange.getResponseHeaders().add("Content-Type", "text/html");
+		exchange.getResponseHeaders()
+				.add("Content-Type", "text/html");
 		exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.length());
 		OutputStream responseBody = exchange.getResponseBody();
 		responseBody.write(response.getBytes());

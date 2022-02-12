@@ -1,7 +1,6 @@
 package Grid;
 
-import Grid.Grid;
-import Resources.Converters;
+import Converters.Converters;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

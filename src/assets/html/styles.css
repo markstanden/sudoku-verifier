@@ -76,11 +76,11 @@ span.grid-cell {
 }
 
 span > input {
-border: none;
-font-size: 1.8rem;
-text-align: center;
-padding: 1vh;
-background-color: var(--background-grid);
+    border: none;
+    font-size: 1.8rem;
+    text-align: center;
+    padding: 1vh;
+    background-color: var(--background-grid);
 }
 
 /* For really small screen sizes the font needs a tweak */
@@ -96,24 +96,24 @@ span:nth-child(3n+4):not(:last-child) {
 }
 
 button {
-    padding: 0.8rem;
-    align-self: center;
-    width: max-content;
-    margin: 5vh;
+    bottom: -5rem;
+
+    height: max-content;
+
     border-radius: 0.5rem;
     border: none;
-    transition: all ease-in 0.1s;
-    background-color: var(--background-grid);
-}
 
-button.primary {
+    transition: all ease-in 0.1s;
+
     width: calc(100% - 10vh);
     padding: 1rem;
+    margin: 5vh;
     box-shadow: 0.05rem 0.05rem 0.3rem var(--font-color);
     border-color: var(--border-color);
     background-color: var(--border-color);
     color: var(--background-main);
 }
+
 
 button:hover,
 button:focus {
@@ -124,10 +124,6 @@ button:focus {
 
 button:active {
     transform: translateY(1px);
-}
-
-button.reset {
-    display: none;
 }
 
 footer {
@@ -155,7 +151,7 @@ footer {
 
     #grid-form {
         width: 80vw;
-        max-width: 50em;
+        max-width: fit-content;
         border: 2px solid var(--border-color);
         border-radius: 1rem;
         box-shadow: 0.05rem 0.05rem 0.3rem var(--font-color);
