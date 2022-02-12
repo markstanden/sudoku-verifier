@@ -24,7 +24,7 @@ class HtmlGeneratorTest
 					+ "    </div>\n"
 					+ "    <button class=\"verify\">Verify</button>\n"
 					+ "    <button class=\"reset\">Reset</button>\n"
-					+ "</form>\n";
+					+ "</form>";
 
 	final String TEST_HTML_FORM_THREE_BY_THREE =
 			"<form id=\"grid-form\" method=\"post\" action=\"\">\n"
@@ -47,7 +47,7 @@ class HtmlGeneratorTest
 					+ "    </div>\n"
 					+ "    <button class=\"verify\">Verify</button>\n"
 					+ "    <button class=\"reset\">Reset</button>\n"
-					+ "</form>\n";
+					+ "</form>";
 
 
 	@Test
@@ -66,7 +66,7 @@ class HtmlGeneratorTest
 	@Test
 	void wrapWithSameOpeningClosing()
 	{
-		assertEquals("<div>\n    <p>\n        Test\n    </p>\n</div>\n", wrap("div", TEST_PARA));
+		assertEquals("<div>\n    <p>\n        Test\n    </p>\n</div>", nest("div", TEST_PARA));
 	}
 
 
@@ -74,8 +74,8 @@ class HtmlGeneratorTest
 	void wrapWithCustomOpeningClosingTag()
 	{
 
-		assertEquals("<div class=\"test\">\n    <p>\n        Test\n    </p>\n</div>\n",
-					 wrap("div class=\"test\"", TEST_PARA, "div"));
+		assertEquals("<div class=\"test\">\n    <p>\n        Test\n    </p>\n</div>",
+					 nest("div class=\"test\"", TEST_PARA, "div"));
 	}
 
 

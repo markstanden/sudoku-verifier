@@ -28,11 +28,12 @@ public class SudokuHandler implements HttpHandler
 				String header = Files.readString(Path.of("src/assets/html/header.html"));
 				String css = Files.readString(Path.of("src/assets/html/styles.css"));
 				String title = Files.readString(Path.of("src/assets/html/title.html"));
-				String grid = Files.readString(Path.of("src/assets/html/grid.html"));
 				String footer = Files.readString(Path.of("src/assets/html/footer.html"));
 
-				String style = HtmlGenerator.wrap("style", css);
-				String body = HtmlGenerator.wrap("body", title.concat(grid));
+				String style = HtmlGenerator.nest("style", css);
+				String body = HtmlGenerator.nest("body",
+												 title.concat("\n").concat(HtmlGenerator.createGrid(FormProcessor.listFromNumString(
+														 "123456789" + "456789123" + "789123456" + "234567891" + "567891234" + "891234567" + "345678912" + "678912345" + "912345678"))));
 				response = HtmlGenerator.buildHtml(header, style, body, footer);
 			}
 			catch(FileNotFoundException e) {
@@ -44,10 +45,7 @@ public class SudokuHandler implements HttpHandler
 		String formData = "";
 		if(exchange.getRequestMethod().equals("POST")) {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody()));
-			formData = reader.lines()
-					.filter(line -> line.startsWith("R0-C0"))
-					.findFirst()
-					.orElse("");
+			formData = reader.lines().filter(line -> line.startsWith("R0-C0")).findFirst().orElse("");
 
 			boolean isValid = SudokuVerifier.verify(FormProcessor.fromFormData(formData));
 			response = "<h1>Grid is " + (isValid ? "Valid" : "Invalid") + "</h1>";
