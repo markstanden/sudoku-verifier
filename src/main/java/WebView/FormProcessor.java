@@ -36,13 +36,13 @@ public class FormProcessor
 	}
 
 
-	public static <T> String nestedListToString(List<List<T>> nestedList)
+	public static String nestedListToString(List<List<Integer>> nestedList)
 	{
 		List<String> flatStringList = nestedList.stream()
-												.map(list -> list.stream()
-																 .map(String::valueOf)
-																 .collect(Collectors.joining()))
-												.toList();
+		                                        .map(list -> list.stream()
+		                                                         .map(String::valueOf)
+		                                                         .collect(Collectors.joining()))
+		                                        .toList();
 
 		return String.join("", flatStringList);
 	}
@@ -67,16 +67,15 @@ public class FormProcessor
 	 */
 	public static List<List<Integer>> regexGroupToList(String regex, String query)
 	{
-
 		Pattern regexPattern = Pattern.compile(regex);
 		try {
 			Matcher regexMatcher = regexPattern.matcher(query);
 			return chopToNestedList(SudokuGrid.GRID_LENGTH,
-									regexMatcher.results()
-												.map(matchResult -> matchResult.group(1))
-												.map(match -> match.isBlank() ? "0" : match)
-												.map(Integer::valueOf)
-												.toList());
+			                        regexMatcher.results()
+			                                    .map(matchResult -> matchResult.group(1))
+			                                    .map(match -> match.isBlank() ? "0" : match)
+			                                    .map(Integer::valueOf)
+			                                    .toList());
 		}
 		catch(NullPointerException e) {
 			throw new IllegalArgumentException("Empty Query sent to be validated");
@@ -87,13 +86,16 @@ public class FormProcessor
 
 	private static List<List<Integer>> chopToNestedList(int rowLength, List<Integer> query)
 	{
-		if(query.size() % rowLength != 0) {
+		Objects.requireNonNull(query);
+
+		if(query.size() % rowLength != 0 ) {
 			throw new IllegalArgumentException(String.format("Invalid query length, expected multiple of %d, got %d",
-															 rowLength,
-															 query.size()));
-		} return IntStream.range(0, rowLength)
-						  .mapToObj(rowStart -> query.subList(rowLength * rowStart, rowLength * (rowStart + 1)))
-						  .toList();
+			                                                 rowLength,
+			                                                 query.size()));
+		}
+		return IntStream.range(0, rowLength)
+		                .mapToObj(rowStart -> query.subList(rowLength * rowStart, rowLength * (rowStart + 1)))
+		                .toList();
 	}
 
 
@@ -111,7 +113,7 @@ public class FormProcessor
 	public static <T> long totalValues(List<List<T>> nestedList)
 	{
 		return nestedList.stream()
-						 .mapToLong(Collection::size)
-						 .sum();
+		                 .mapToLong(Collection::size)
+		                 .sum();
 	}
 }

@@ -54,6 +54,9 @@ p.blurb {
 	}
 }
 
+a.bookmark {
+	float: right;
+}
 
 #grid-form {
 	background-color : var(--color-secondary);
