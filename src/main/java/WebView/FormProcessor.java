@@ -2,6 +2,7 @@ package WebView;
 
 import Sudoku.SudokuGrid;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -66,14 +67,21 @@ public class FormProcessor
 	 */
 	public static List<List<Integer>> regexGroupToList(String regex, String query)
 	{
+
 		Pattern regexPattern = Pattern.compile(regex);
 		Matcher regexMatcher = regexPattern.matcher(query);
-		return chopToNestedList(SudokuGrid.GRID_LENGTH,
-								regexMatcher.results()
-											.map(matchResult -> matchResult.group(1))
-											.map(match -> match.isBlank() ? "0" : match)
-											.map(Integer::valueOf)
-											.toList());
+		try {
+			return chopToNestedList(SudokuGrid.GRID_LENGTH,
+									regexMatcher.results()
+												.map(matchResult -> matchResult.group(1))
+												.map(match -> match.isBlank() ? "0" : match)
+												.map(Integer::valueOf)
+												.toList());
+		}
+		catch(IllegalArgumentException e) {
+			throw e;
+		}
+
 	}
 
 
@@ -85,5 +93,17 @@ public class FormProcessor
 		return IntStream.range(0, rowLength)
 						.mapToObj(rowStart -> query.subList(rowLength * rowStart, rowLength * (rowStart + 1)))
 						.toList();
+	}
+
+
+	/**
+	 * Calculates the total number
+	 * of items in a nested list
+	 * @param nestedList The nested list to be sized
+	 * @param <T> The value type stored in the list
+	 * @return a long of the total number of values stored in the lists.
+	 */
+	public static <T> long totalValues(List<List<T>> nestedList){
+		return nestedList.stream().mapToLong(Collection::size).sum();
 	}
 }

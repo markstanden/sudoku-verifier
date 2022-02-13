@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class GridBuilderTest
 {
 	final String TEST_HTML_FORM_TWO_BY_TWO =
-			"<form id=\"grid-form\" method=\"post\" action=\"\">\n"
+			"<form id=\"grid-form\" method=\"post\" action=\"/\">\n"
 					+ "    <fieldset class=\"grid-row\" name=\"Row0\" form=\"grid-form\">\n"
 					+ "        <span class=\"grid-cell\"><input name=\"R0-C0\" type=\"number\" min=\"0\" max=\"9\" value=\"1\"/></span>\n"
 					+ "        <span class=\"grid-cell\"><input name=\"R0-C1\" type=\"number\" min=\"0\" max=\"9\" value=\"2\"/></span>\n"
@@ -21,7 +21,7 @@ public class GridBuilderTest
 					+ "</form>";
 
 	final String TEST_HTML_FORM_THREE_BY_THREE =
-			"<form id=\"grid-form\" method=\"post\" action=\"\">\n"
+			"<form id=\"grid-form\" method=\"post\" action=\"/\">\n"
 					+ "    <fieldset class=\"grid-row\" name=\"Row0\" form=\"grid-form\">\n"
 					+ "        <span class=\"grid-cell\"><input name=\"R0-C0\" type=\"number\" min=\"0\" max=\"9\" value=\"1\"/></span>\n"
 					+ "        <span class=\"grid-cell\"><input name=\"R0-C1\" type=\"number\" min=\"0\" max=\"9\" value=\"2\"/></span>\n"

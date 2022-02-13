@@ -4,6 +4,7 @@ import Sudoku.SudokuVerifier;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import javax.sound.midi.SoundbankResource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,6 +16,7 @@ public class SudokuHandler implements HttpHandler
 {
 	final List<List<Integer>> BASE_GRID = FormProcessor.validateNumstringToList(
 			"085601023462308150003005068578030649620984735349567812050803206836000504290756380");
+
 
 	/**
 	 * HttpHandler requires a handle function that takes a request.
@@ -31,17 +33,15 @@ public class SudokuHandler implements HttpHandler
 				   .equals("GET")) {
 			String unsanitisedQuery = exchange.getRequestURI()
 											  .getQuery();
+			System.out.println("Called Handler with request:\n" + exchange.getRequestMethod());
 			//Sanitise string
 			try {
 				List<List<Integer>> cleanQuery = FormProcessor.validateFormDataToList(unsanitisedQuery);
-				response = PageBuilder.build(cleanQuery,
-											 "<p class=\"blurb\">Continue with the grid...</p>");
+				response = PageBuilder.build(cleanQuery, "<p class=\"blurb\">Continue with the grid...</p>");
 			}
 			catch(IllegalArgumentException e) {
 				response = PageBuilder.build(BASE_GRID,
-											 "<p class=\"blurb\">Complete the grid and verify your attempt." +
-													 "  You can verify as many times as you need to." +
-													 "</p>");
+											 "<p class=\"blurb\">Complete the grid and verify your attempt." + "  You can verify as many times as you need to." + "</p>");
 			}
 
 		}
@@ -58,12 +58,11 @@ public class SudokuHandler implements HttpHandler
 			List<List<Integer>> sanitisedGrid = FormProcessor.validateFormDataToList(unsanitisedRequest);
 			boolean isValid = SudokuVerifier.verify(sanitisedGrid);
 			response = PageBuilder.build(sanitisedGrid,
-										 HtmlGenerator.nest("p class=\"blurb\"",
-															String.format("The grid is %s",
-																		  isValid
-																		  ? "correct! Well " + "Done"
-																		  : "not quite right, try again."),
-															"p"));
+										 Tags.nest("p class=\"blurb\"",
+												   String.format("The grid is %s",
+																 isValid
+																 ? "correct! Well Done"
+																 : "not quite right, try again.")));
 		}
 
 		exchange.getResponseHeaders()
