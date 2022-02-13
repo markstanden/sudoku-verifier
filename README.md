@@ -62,6 +62,20 @@ to create test grids for isolated tests.
 
 ## Furthering the project
 
+### Functional Programming
+
+More and more of the functionality of the app was moved (and is continuing to move) to smaller static stateless functions.  These are highly reliable single use functions that can be heavily tested to ensure they work as expected, with no side effects.
+
+### Unit Testing
+
+Further to the end-to-end testing of the original project, there are unit tests covering most of the functionality of the app.  The majority of these tests were written first, with edge cases and exception checks added as the method was complete.
+
+I find this a quick way to work, as it requires the functionality of the method to be thought through before starting to code.
+
+### Generic Abstract Grid Superclass
+
+Converting the Grid implementation to a Generic Abstract class could allow the grid to be used in future projects, and presented many challenges due to the way Java handles generics and primitive values.  Also, Array creation with Generics throws a compiler error, so major refactoring was required.
+
 ### Servlet
 
 Originally the verifier used the console as a means of communication, but I wrote a little servlet to send and receive grids.
@@ -81,9 +95,9 @@ It also provided an opportunity to exhibit:
 
 ### TODO
 
-- [ ] Java generated html  
-- [ ] bookmarkable urls to store state  
-- [ ] better response page  
+- [X] Java generated html  
+- [X] bookmarkable urls to store state  
+- [X] better response page  
 - [ ] testing server with test http requests  
-- [ ] refactor for hidden grid implementation  
+- [X] refactor for hidden grid implementation  
 - [ ] dockerfile for easy deployment  
