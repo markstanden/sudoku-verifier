@@ -10,7 +10,12 @@ public class PageBuilder
 {
 	public static String build(List<List<Integer>> sanitisedQuery, String messageHTML) throws IOException, IllegalArgumentException
 	{
-
+		if(sanitisedQuery == null){
+			throw new IllegalArgumentException("Supplied a null grid to PageBuilder");
+		}
+		if(FormProcessor.totalValues(sanitisedQuery) != 81){
+			throw new IllegalArgumentException("Invalid Query String");
+		}
 		try {
 			String head = Files.readString(Path.of("src/assets/html/head.html"));
 			String css = Files.readString(Path.of("src/assets/html/styles.css"));

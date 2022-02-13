@@ -42,6 +42,9 @@ public class SudokuHandler implements HttpHandler
 			catch(IllegalArgumentException e) {
 				response = PageBuilder.build(BASE_GRID,
 											 "<p class=\"blurb\">Complete the grid and verify your attempt." + "  You can verify as many times as you need to." + "</p>");
+			}catch(Exception e) {
+				System.out.println("Got an unexpected error:\n" + e.getMessage());
+				response = "Bad Request, Something went wrong.";
 			}
 
 		}

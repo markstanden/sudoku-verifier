@@ -69,8 +69,8 @@ public class FormProcessor
 	{
 
 		Pattern regexPattern = Pattern.compile(regex);
-		Matcher regexMatcher = regexPattern.matcher(query);
 		try {
+			Matcher regexMatcher = regexPattern.matcher(query);
 			return chopToNestedList(SudokuGrid.GRID_LENGTH,
 									regexMatcher.results()
 												.map(matchResult -> matchResult.group(1))
@@ -78,8 +78,8 @@ public class FormProcessor
 												.map(Integer::valueOf)
 												.toList());
 		}
-		catch(IllegalArgumentException e) {
-			throw e;
+		catch(NullPointerException e) {
+			throw new IllegalArgumentException("Empty Query sent to be validated");
 		}
 
 	}
@@ -87,23 +87,31 @@ public class FormProcessor
 
 	private static List<List<Integer>> chopToNestedList(int rowLength, List<Integer> query)
 	{
-		if(query.size() != SudokuGrid.GRID_LENGTH * SudokuGrid.GRID_LENGTH) {
-			throw new IllegalArgumentException("Invalid query length, expected 81 (9x9 grid) got " + query.size());
-		}
-		return IntStream.range(0, rowLength)
-						.mapToObj(rowStart -> query.subList(rowLength * rowStart, rowLength * (rowStart + 1)))
-						.toList();
+		if(query.size() % rowLength != 0) {
+			throw new IllegalArgumentException(String.format("Invalid query length, expected multiple of %d, got %d",
+															 rowLength,
+															 query.size()));
+		} return IntStream.range(0, rowLength)
+						  .mapToObj(rowStart -> query.subList(rowLength * rowStart, rowLength * (rowStart + 1)))
+						  .toList();
 	}
 
 
 	/**
 	 * Calculates the total number
 	 * of items in a nested list
-	 * @param nestedList The nested list to be sized
-	 * @param <T> The value type stored in the list
+	 *
+	 * @param nestedList
+	 * 		The nested list to be sized
+	 * @param <T>
+	 * 		The value type stored in the list
+	 *
 	 * @return a long of the total number of values stored in the lists.
 	 */
-	public static <T> long totalValues(List<List<T>> nestedList){
-		return nestedList.stream().mapToLong(Collection::size).sum();
+	public static <T> long totalValues(List<List<T>> nestedList)
+	{
+		return nestedList.stream()
+						 .mapToLong(Collection::size)
+						 .sum();
 	}
 }
