@@ -12,18 +12,20 @@ public class PageBuilder
 	{
 
 		try {
-			String header = Files.readString(Path.of("src/assets/html/header.html"));
+			String head = Files.readString(Path.of("src/assets/html/head.html"));
 			String css = Files.readString(Path.of("src/assets/html/styles.css"));
 			String title = Files.readString(Path.of("src/assets/html/title.html"));
 			String footer = Files.readString(Path.of("src/assets/html/footer.html"));
 
-			String style = HtmlGenerator.nest("style", css);
+			String style = HtmlGenerator.nest("head", HtmlGenerator.nest("style", css));
 			String body = HtmlGenerator.nest("body",
 											 title.concat("\n")
 												  .concat(messageHTML)
 												  .concat("\n")
-												  .concat(GridBuilder.addGrid(sanitisedQuery)));
-			return HtmlGenerator.buildHtml(header, style, body, footer);
+												  .concat(GridBuilder.addGrid(sanitisedQuery))
+												  .concat("\n")
+												  .concat(footer));
+			return HtmlGenerator.buildHtml(head, style, body);
 		}
 		catch(FileNotFoundException e) {
 			System.out.println("An error occurred attempting to read the html file.");

@@ -71,6 +71,7 @@ More and more of the functionality of the app was moved (and is continuing to mo
 Further to the end-to-end testing of the original project, there are unit tests covering most of the functionality of the app.  The majority of these tests were written first, with edge cases and exception checks added as the method was complete.
 
 I find this a quick way to work, as it requires the functionality of the method to be thought through before starting to code.
+U
 
 ### Generic Abstract Grid Superclass
 

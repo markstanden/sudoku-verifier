@@ -35,11 +35,13 @@ public class SudokuHandler implements HttpHandler
 			try {
 				List<List<Integer>> cleanQuery = FormProcessor.validateFormDataToList(unsanitisedQuery);
 				response = PageBuilder.build(cleanQuery,
-											 "<p class=\"blurb\">Enter your grid here, for instant " + "verification.  I hope you win!</p>");
+											 "<p class=\"blurb\">Continue with the grid...</p>");
 			}
 			catch(IllegalArgumentException e) {
 				response = PageBuilder.build(BASE_GRID,
-											 "<p class=\"blurb\">Enter your grid here, for instant " + "verification.  I hope you win!</p>");
+											 "<p class=\"blurb\">Complete the grid and verify your attempt." +
+													 "  You can verify as many times as you need to." +
+													 "</p>");
 			}
 
 		}

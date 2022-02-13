@@ -16,7 +16,7 @@ public class GridBuilder
 		final String gridAsHTMLWithButtons = gridAsHTML.concat("\n")
 													   .concat(verifyButton);
 
-		return HtmlGenerator.nest("form id=\"grid-form\" method=\"post\" action=\"\"",
+		return HtmlGenerator.nest("form id=\"grid-form\" method=\"post\" action=\"/\"",
 
 								  gridAsHTMLWithButtons,
 
