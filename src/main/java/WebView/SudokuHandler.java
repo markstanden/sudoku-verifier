@@ -4,7 +4,6 @@ import Sudoku.SudokuVerifier;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import javax.sound.midi.SoundbankResource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,6 +17,13 @@ public class SudokuHandler implements HttpHandler
 			"085601023462308150003005068578030649620984735349567812050803206836000504290756380");
 
 
+
+	private <T> String link(List<List<T>> cleanQuery)
+	{
+		return Tags.createLink("/" + FormProcessor.nestedListToString(cleanQuery), "Link", "bookmark", "bookmark");
+	}
+
+
 	/**
 	 * HttpHandler requires a handle function that takes a request.
 	 *
@@ -29,20 +35,25 @@ public class SudokuHandler implements HttpHandler
 	public void handle(HttpExchange exchange) throws IOException
 	{
 		String response = "";
+
 		if(exchange.getRequestMethod()
 				   .equals("GET")) {
 			String unsanitisedQuery = exchange.getRequestURI()
 											  .getQuery();
-			System.out.println("Called Handler with request:\n" + exchange.getRequestMethod());
 			//Sanitise string
 			try {
 				List<List<Integer>> cleanQuery = FormProcessor.validateFormDataToList(unsanitisedQuery);
-				response = PageBuilder.build(cleanQuery, "<p class=\"blurb\">Continue with the grid...</p>");
+				response = PageBuilder.build(cleanQuery,
+											 Tags.nest("p class=\"blurb\">",
+													   "Continue with the grid..." + link(cleanQuery)));
 			}
 			catch(IllegalArgumentException e) {
 				response = PageBuilder.build(BASE_GRID,
-											 "<p class=\"blurb\">Complete the grid and verify your attempt." + "  You can verify as many times as you need to." + "</p>");
-			}catch(Exception e) {
+											 Tags.nest("p class=\"blurb\"",
+													   "Complete the grid and verify your attempt.  You can verify as many times as you need to." + link(
+															   BASE_GRID)));
+			}
+			catch(Exception e) {
 				System.out.println("Got an unexpected error:\n" + e.getMessage());
 				response = "Bad Request, Something went wrong.";
 			}
@@ -58,14 +69,17 @@ public class SudokuHandler implements HttpHandler
 											  .findFirst()
 											  .orElse("");
 
-			List<List<Integer>> sanitisedGrid = FormProcessor.validateFormDataToList(unsanitisedRequest);
-			boolean isValid = SudokuVerifier.verify(sanitisedGrid);
-			response = PageBuilder.build(sanitisedGrid,
+			List<List<Integer>> cleanQuery = FormProcessor.validateFormDataToList(unsanitisedRequest);
+
+			/* The original verifier gets called here... */
+			final boolean isValid = SudokuVerifier.verify(cleanQuery);
+
+			response = PageBuilder.build(cleanQuery,
 										 Tags.nest("p class=\"blurb\"",
 												   String.format("The grid is %s",
 																 isValid
 																 ? "correct! Well Done"
-																 : "not quite right, try again.")));
+																 : "not quite right, try again.") + link(cleanQuery)));
 		}
 
 		exchange.getResponseHeaders()
@@ -75,6 +89,4 @@ public class SudokuHandler implements HttpHandler
 		responseBody.write(response.getBytes());
 		responseBody.close();
 	}
-
-
 }

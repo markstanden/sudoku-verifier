@@ -36,7 +36,7 @@ public class FormProcessor
 	}
 
 
-	public static String nestedListToString(List<List<Integer>> nestedList)
+	public static <T> String nestedListToString(List<List<T>> nestedList)
 	{
 		List<String> flatStringList = nestedList.stream()
 												.map(list -> list.stream()

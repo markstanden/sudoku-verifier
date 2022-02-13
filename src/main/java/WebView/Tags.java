@@ -45,4 +45,11 @@ public class Tags
 		String[] result = new String[]{DOCTYPE, HTML_OPENING_TAG, String.join("\n", components), HTML_CLOSING_TAG};
 		return String.join("\n", result);
 	}
+
+
+	public static String createLink(String address, String message, String rel, String... classes)
+	{
+		String classString = classes.length > 0 ? "class=\"" + String.join(" ", classes) : "";
+		return "<a " + classString + "\" href=\"" + address + "\" rel=\"" + rel + "\">" + message + "</a>";
+	}
 }

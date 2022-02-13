@@ -8,12 +8,13 @@ import java.util.List;
 
 public class PageBuilder
 {
-	public static String build(List<List<Integer>> sanitisedQuery, String messageHTML) throws IOException, IllegalArgumentException
+	public static String build(List<List<Integer>> sanitisedQuery, String messageHTML)
+			throws IOException, IllegalArgumentException
 	{
-		if(sanitisedQuery == null){
+		if(sanitisedQuery == null) {
 			throw new IllegalArgumentException("Supplied a null grid to PageBuilder");
 		}
-		if(FormProcessor.totalValues(sanitisedQuery) != 81){
+		if(FormProcessor.totalValues(sanitisedQuery) != 81) {
 			throw new IllegalArgumentException("Invalid Query String");
 		}
 		try {
@@ -41,4 +42,5 @@ public class PageBuilder
 			throw e;
 		}
 	}
+
 }
