@@ -43,7 +43,9 @@ public class SudokuHandler implements HttpHandler
 		           .equals("GET")) {
 			String unsanitisedQuery = exchange.getRequestURI()
 			                                  .getQuery();
-
+			if (unsanitisedQuery == null) {
+				unsanitisedQuery = FormProcessor.nestedListToString(BASE_GRID);
+			}
 			//Sanitise string
 			try {
 				List<List<Integer>> cleanQuery = FormProcessor.validateNumstringToList(unsanitisedQuery);
