@@ -19,7 +19,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>dev.markstanden.Main</mainClass>
+                            <mainClass>Webview.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
