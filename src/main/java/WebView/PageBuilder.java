@@ -18,10 +18,10 @@ public class PageBuilder
 			throw new IllegalArgumentException("Invalid Query String");
 		}
 		try {
-			String head = Files.readString(Path.of("src/main/resources/html/head.html"));
-			String css = Files.readString(Path.of("src/main/resources/html/styles.css"));
-			String title = Files.readString(Path.of("src/main/resources/html/title.html"));
-			String footer = Files.readString(Path.of("src/main/resources/html/footer.html"));
+			String head = Files.readString(Path.of("html/head.html"));
+			String css = Files.readString(Path.of("html/styles.css"));
+			String title = Files.readString(Path.of("html/title.html"));
+			String footer = Files.readString(Path.of("html/footer.html"));
 
 			String style = Tags.nest("head", Tags.nest("style", css));
 			String body = Tags.nest("body",
