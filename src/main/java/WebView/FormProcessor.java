@@ -54,7 +54,6 @@ public class FormProcessor
 		if(! Pattern.matches(IS_A_NUMBER_REGEX, query)) {
 			throw new IllegalArgumentException("Supplied query string is not valid");
 		}
-		;
 		return regexGroupToList(NUMSTRING_REGEX, query);
 
 	}
@@ -88,7 +87,7 @@ public class FormProcessor
 	{
 		Objects.requireNonNull(query);
 
-		if(query.size() % rowLength != 0 ) {
+		if(query.size() % rowLength != 0) {
 			throw new IllegalArgumentException(String.format("Invalid query length, expected multiple of %d, got %d",
 			                                                 rowLength,
 			                                                 query.size()));
