@@ -43,6 +43,8 @@ public class SudokuHandler implements HttpHandler
 		           .equals("GET")) {
 			String unsanitisedQuery = exchange.getRequestURI()
 			                                  .getQuery();
+			System.out.println("Request Received:");
+			System.out.println(exchange.getRemoteAddress().getAddress().getHostAddress());
 			if (unsanitisedQuery == null) {
 				unsanitisedQuery = "";
 			}
