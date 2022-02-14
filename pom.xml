@@ -19,7 +19,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>Webview.Main</mainClass>
+                            <mainClass>Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
