@@ -1,4 +1,4 @@
-import WebView.Server;
+package WebView;
 
 public class Main {
     final static int DEFAULT_PORT = 8080;
