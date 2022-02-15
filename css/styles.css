@@ -112,17 +112,17 @@ span > input {
 }
 
 
-/* For really small screen sizes the font needs a tweak */
-@media (max-width : 20em) {
-	span > input {
-		font-size : 1.2rem;
-	}
-}
-
-
 span:nth-child(3n+4):not(:last-child) {
 	border-left  : 1px dotted var(--color-primary);
 	padding-left : 3vw;
+}
+
+
+/* For really small screen sizes the font needs a tweak */
+@media (max-width : 20em) {
+	span > input {
+		font-size : 1rem;
+	}
 }
 
 

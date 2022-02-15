@@ -1,5 +1,6 @@
 package WebView;
 
+import Sudoku.StarterGrids;
 import Sudoku.SudokuVerifier;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -13,11 +14,6 @@ import java.util.List;
 
 public class SudokuHandler implements HttpHandler
 {
-	final List<List<Integer>> BASE_GRID = FormProcessor.validateNumstringToList(
-			"085601023462308150003005068578030649620984735349567812050803206836000504290756380");
-
-
-
 	private String link(List<List<Integer>> cleanQuery)
 	{
 		return Tags.createLink("/?" + FormProcessor.nestedListToString(cleanQuery),
@@ -39,6 +35,7 @@ public class SudokuHandler implements HttpHandler
 	{
 		String response = "";
 
+
 		if(exchange.getRequestMethod()
 		           .equals("GET")) {
 			String unsanitisedQuery = exchange.getRequestURI()
@@ -58,10 +55,10 @@ public class SudokuHandler implements HttpHandler
 				                                       "Continue with the grid..." + link(cleanQuery)));
 			}
 			catch(IllegalArgumentException e) {
-				response = PageBuilder.build(BASE_GRID,
+				response = PageBuilder.build(StarterGrids.getRandomGrid(),
 				                             Tags.nest("p class=\"blurb\"",
 				                                       "Complete the grid and verify your attempt.  You can verify as many times as you need to." + link(
-						                                       BASE_GRID)));
+						                                       StarterGrids.getRandomGrid())));
 			}
 			catch(Exception e) {
 				System.out.println("Got an unexpected error:\n" + e.getMessage());
