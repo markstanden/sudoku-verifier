@@ -50,7 +50,7 @@ class TagsTest
 	{
 
 		assertEquals("<div class=\"test\">\n    <p>\n        Test\n    </p>\n</div>",
-					 nest("div class=\"test\"", TEST_PARA));
+		             nest("div class=\"test\"", TEST_PARA));
 	}
 
 
@@ -69,45 +69,29 @@ class TagsTest
 	}
 
 
-	@Test
-	void buildHtmlWithNoComponents()
-	{
-		assertEquals(String.format("%s%n%s%n%s%n%s", DOCTYPE, HTML_OPENING_TAG, "", HTML_CLOSING_TAG), buildHtml());
-	}
-
 
 	@Test
 	void buildHtmlWithOneComponent()
 	{
-		assertEquals(String.format("%s%n%s%n%s%n%s", DOCTYPE, HTML_OPENING_TAG, TEST_PARA, HTML_CLOSING_TAG),
-					 buildHtml(TEST_PARA));
+		assertEquals(String.format("%s%n%s%n%s%n%s",
+		                           HTML.DOCTYPE,
+		                           "<html lang=\"en\">",
+		                           "    <p>\n        Test\n    </p>",
+		                           "</html>"), Tags.siblings(HTML.DOCTYPE, Tags.nest(HTML.LANG, TEST_PARA)));
 	}
 
 
 	@Test
 	void buildHtmlWithThreeComponents()
 	{
+		String indentedPara = "    <p>\n        Test\n    </p>";
 		assertEquals(String.format("%s%n%s%n%s%n%s%n%s%n%s",
-								   DOCTYPE,
-								   HTML_OPENING_TAG,
-								   TEST_PARA,
-								   TEST_PARA,
-								   TEST_PARA,
-								   HTML_CLOSING_TAG), buildHtml(TEST_PARA, TEST_PARA, TEST_PARA));
-	}
-
-
-	@Test
-	void buildHtmlWithFiveComponents()
-	{
-		assertEquals(String.format("%s%n%s%n%s%n%s%n%s%n%s%n%s%n%s",
-								   DOCTYPE,
-								   HTML_OPENING_TAG,
-								   TEST_PARA,
-								   TEST_PARA,
-								   TEST_PARA,
-								   TEST_PARA,
-								   TEST_PARA,
-								   HTML_CLOSING_TAG), buildHtml(TEST_PARA, TEST_PARA, TEST_PARA, TEST_PARA, TEST_PARA));
+		                           HTML.DOCTYPE,
+		                           "<html lang=\"en\">",
+		                           indentedPara,
+		                           indentedPara,
+		                           indentedPara,
+		                           "</html>"),
+		             Tags.siblings(HTML.DOCTYPE, Tags.nest(HTML.LANG, TEST_PARA, TEST_PARA, TEST_PARA)));
 	}
 }
