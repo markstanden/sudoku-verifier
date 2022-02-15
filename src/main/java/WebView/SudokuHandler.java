@@ -22,7 +22,7 @@ public class SudokuHandler implements HttpHandler
 	{
 		return Tags.createLink("/?" + FormProcessor.nestedListToString(cleanQuery),
 		                       "Bookmarkable link",
-		                       "bookmark",
+		                       Tags.Rel.BOOKMARK,
 		                       "bookmark");
 	}
 
@@ -44,8 +44,10 @@ public class SudokuHandler implements HttpHandler
 			String unsanitisedQuery = exchange.getRequestURI()
 			                                  .getQuery();
 			System.out.println("Request Received:");
-			System.out.println(exchange.getRemoteAddress().getAddress().getHostAddress());
-			if (unsanitisedQuery == null) {
+			System.out.println(exchange.getRemoteAddress()
+			                           .getAddress()
+			                           .getHostAddress());
+			if(unsanitisedQuery == null) {
 				unsanitisedQuery = "";
 			}
 			//Sanitise string
